@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attestto — Identity Infrastructure</title>
+  <meta name="description" content="Identity infrastructure for regulated environments. W3C DID method, Solana Name Service, verifiable credentials.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%234f46e5'/><text x='16' y='22' text-anchor='middle' font-size='18' font-family='system-ui' font-weight='700' fill='white'>A</text></svg>">
+  <style>
+    :root {
+      --fg: #1a1a2e;
+      --bg: #fdfdfe;
+      --accent: #4f46e5;
+      --accent-hover: #4338ca;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --code-bg: #f1f5f9;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--fg);
+      background: var(--bg);
+      line-height: 1.7;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    header {
+      padding: 1.25rem 2rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--fg);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .logo span { color: var(--accent); }
+    header nav { display: flex; gap: 1.5rem; align-items: center; }
+    header nav a {
+      font-size: 0.88rem;
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+    header nav a:hover { color: var(--accent); }
+
+    /* Hero */
+    .hero {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 2rem;
+      max-width: 52rem;
+      margin: 0 auto;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1.25rem;
+      letter-spacing: -0.025em;
+    }
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--accent), #7c3aed);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 38rem;
+      margin-bottom: 2.5rem;
+    }
+
+    /* Cards */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      width: 100%;
+      max-width: 52rem;
+      margin-bottom: 3rem;
+    }
+    .card {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      text-decoration: none;
+      color: var(--fg);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 2px 12px rgba(79, 70, 229, 0.08);
+    }
+    .card h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+    .card p {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin: 0;
+      line-height: 1.5;
+    }
+    .card .tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    /* Standards bar */
+    .standards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    .standards span {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--muted);
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      padding: 0.3rem 0.75rem;
+      border-radius: 20px;
+    }
+
+    /* Footer */
+    footer {
+      padding: 1.5rem 2rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 640px) {
+      header { flex-direction: column; gap: 0.75rem; }
+      .cards { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/" class="logo">attestto<span>.</span></a>
+    <nav>
+      <a href="https://spec.attestto.com/did-sns/">Specification</a>
+      <a href="https://github.com/Attestto-com">GitHub</a>
+      <a href="mailto:standards@attestto.com">Contact</a>
+    </nav>
+  </header>
+
+  <main class="hero">
+    <h1>Identity infrastructure for <em>regulated environments</em></h1>
+    <p>Decentralized identity anchored to Solana Name Service. W3C-conformant DID resolution, verifiable credentials with selective disclosure, and issuer-signed attestations for institutional use cases.</p>
+
+    <div class="standards">
+      <span>W3C DID v1.1</span>
+      <span>SD-JWT Selective Disclosure</span>
+      <span>Solana Name Service</span>
+      <span>Solana Attestation Service</span>
+      <span>DIDComm v2</span>
+      <span>GLEIF vLEI</span>
+    </div>
+
+    <div class="cards">
+      <a class="card" href="https://spec.attestto.com/did-sns/">
+        <div class="tag">Specification</div>
+        <h3>did:sns Method</h3>
+        <p>Name-anchored DIDs on Solana. Human-readable, hierarchically-controlled, with issuer-signed proof via SAS.</p>
+      </a>
+      <a class="card" href="https://github.com/Attestto-com/did-sns-resolver">
+        <div class="tag">Open Source</div>
+        <h3>DID Resolver</h3>
+        <p>Reference implementation with DIF Universal Resolver driver. TypeScript, zero framework dependencies.</p>
+      </a>
+      <a class="card" href="https://spec.attestto.com/did-sns/report/">
+        <div class="tag">Conformance</div>
+        <h3>Implementation Report</h3>
+        <p>186 tests across 7 W3C DID Core specification sections. Full CRUD coverage.</p>
+      </a>
+      <a class="card" href="https://spec.attestto.com/did-sns/charter/">
+        <div class="tag">Governance</div>
+        <h3>Community Charter</h3>
+        <p>Open contribution model under the W3C Software and Document License. Apache 2.0 for implementations.</p>
+      </a>
+    </div>
+
+    <div class="standards">
+      <span>LEI: 9845008661B99CC9FD07</span>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Attestto &middot; <a href="mailto:standards@attestto.com">standards@attestto.com</a> &middot; LEI <a href="https://search.gleif.org/#/record/9845008661B99CC9FD07">9845008661B99CC9FD07</a></p>
+  </footer>
+</body>
+</html>
