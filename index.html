@@ -3,230 +3,628 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Attestto — Identity Infrastructure</title>
-  <meta name="description" content="Identity infrastructure for regulated environments. W3C DID method, Solana Name Service, verifiable credentials.">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%234f46e5'/><text x='16' y='22' text-anchor='middle' font-size='18' font-family='system-ui' font-weight='700' fill='white'>A</text></svg>">
+  <title>Attestto — Issue, verify, and sign at scale</title>
+  <meta name="description" content="Credential issuance APIs, document signing, governance infrastructure. Built on open standards. W3C DID, Verifiable Credentials, Solana.">
+  <meta name="theme-color" content="#0f172a">
+  <meta property="og:title" content="Attestto — Issue, verify, and sign at scale">
+  <meta property="og:description" content="Credential issuance APIs, document signing, governance infrastructure. Built on open standards.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://attestto.com">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◈</text></svg>">
   <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      --fg: #1a1a2e;
-      --bg: #fdfdfe;
-      --accent: #4f46e5;
-      --accent-hover: #4338ca;
-      --muted: #64748b;
-      --border: #e2e8f0;
-      --code-bg: #f1f5f9;
-    }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      color: var(--fg);
-      background: var(--bg);
-      line-height: 1.7;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      --color-ink: #0f172a;
+      --color-ink-muted: #475569;
+      --color-ink-subtle: #94a3b8;
+      --color-surface: #ffffff;
+      --color-surface-alt: #f8fafc;
+      --color-border: #e2e8f0;
+      --color-accent: #1e40af;
+      --color-accent-light: #dbeafe;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+      --max-width: 72rem;
+      --space-xs: 0.5rem;
+      --space-sm: 1rem;
+      --space-md: 2rem;
+      --space-lg: 4rem;
+      --space-xl: 6rem;
     }
 
-    /* Header */
-    header {
-      padding: 1.25rem 2rem;
-      border-bottom: 1px solid var(--border);
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-sans);
+      color: var(--color-ink);
+      background: var(--color-surface);
+      line-height: 1.7;
+      font-size: 1.0625rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--color-accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 var(--space-md);
+    }
+
+    section { padding: var(--space-xl) 0; }
+    section + section { border-top: 1px solid var(--color-border); }
+
+    /* ── Nav ── */
+    nav {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--color-border);
+      z-index: 100;
+      padding: var(--space-sm) 0;
+    }
+
+    nav .container {
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
-    .logo {
-      font-size: 1.35rem;
+
+    .nav-brand {
       font-weight: 700;
-      color: var(--fg);
-      text-decoration: none;
+      font-size: 1.125rem;
+      color: var(--color-ink);
       letter-spacing: -0.02em;
     }
-    .logo span { color: var(--accent); }
-    header nav { display: flex; gap: 1.5rem; align-items: center; }
-    header nav a {
-      font-size: 0.88rem;
-      color: var(--muted);
-      text-decoration: none;
+
+    .nav-links {
+      display: flex;
+      gap: var(--space-md);
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--color-ink-muted);
+      font-size: 0.9375rem;
       font-weight: 500;
       transition: color 0.15s;
     }
-    header nav a:hover { color: var(--accent); }
 
-    /* Hero */
-    .hero {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 4rem 2rem;
-      max-width: 52rem;
-      margin: 0 auto;
-    }
+    .nav-links a:hover { color: var(--color-ink); text-decoration: none; }
+
+    /* ── Hero ── */
+    .hero { padding: var(--space-xl) 0 var(--space-lg); border-top: none; }
+
     .hero h1 {
-      font-size: clamp(2rem, 5vw, 3rem);
-      font-weight: 700;
-      line-height: 1.2;
-      margin-bottom: 1.25rem;
-      letter-spacing: -0.025em;
-    }
-    .hero h1 em {
-      font-style: normal;
-      background: linear-gradient(135deg, var(--accent), #7c3aed);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .hero p {
-      font-size: 1.15rem;
-      color: var(--muted);
-      max-width: 38rem;
-      margin-bottom: 2.5rem;
+      font-size: clamp(2.25rem, 5vw, 3.5rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      color: var(--color-ink);
+      max-width: 48rem;
     }
 
-    /* Cards */
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.25rem;
-      width: 100%;
-      max-width: 52rem;
-      margin-bottom: 3rem;
+    .hero .lead {
+      font-size: 1.25rem;
+      color: var(--color-ink-muted);
+      max-width: 40rem;
+      margin-top: var(--space-md);
+      line-height: 1.6;
     }
-    .card {
-      background: var(--code-bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 1.5rem;
-      text-decoration: none;
-      color: var(--fg);
-      transition: border-color 0.2s, box-shadow 0.2s;
+
+    .hero-actions {
+      margin-top: var(--space-md);
+      display: flex;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
     }
-    .card:hover {
-      border-color: var(--accent);
-      box-shadow: 0 2px 12px rgba(79, 70, 229, 0.08);
-    }
-    .card h3 {
-      font-size: 0.95rem;
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
       font-weight: 600;
-      margin-bottom: 0.4rem;
+      font-size: 0.9375rem;
+      transition: all 0.15s;
+      border: none;
+      cursor: pointer;
     }
-    .card p {
-      font-size: 0.85rem;
-      color: var(--muted);
-      margin: 0;
-      line-height: 1.5;
+
+    .btn-primary {
+      background: var(--color-ink);
+      color: var(--color-surface);
     }
-    .card .tag {
-      display: inline-block;
-      font-size: 0.7rem;
+
+    .btn-primary:hover { background: #1e293b; text-decoration: none; }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--color-ink);
+      border: 1px solid var(--color-border);
+    }
+
+    .btn-secondary:hover { background: var(--color-surface-alt); text-decoration: none; }
+
+    /* ── Sections ── */
+    .section-label {
+      font-size: 0.8125rem;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: var(--accent);
-      margin-bottom: 0.5rem;
+      letter-spacing: 0.08em;
+      color: var(--color-accent);
+      margin-bottom: var(--space-xs);
     }
 
-    /* Standards bar */
-    .standards {
+    .section-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: var(--space-sm);
+    }
+
+    .section-desc {
+      color: var(--color-ink-muted);
+      max-width: 40rem;
+      margin-bottom: var(--space-lg);
+    }
+
+    /* ── Grids ── */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+      gap: var(--space-md);
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+      gap: var(--space-md);
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+      gap: var(--space-md);
+    }
+
+    /* ── Cards ── */
+    .card {
+      padding: var(--space-md);
+      border: 1px solid var(--color-border);
+      border-radius: 0.75rem;
+      background: var(--color-surface);
+      transition: border-color 0.15s;
+    }
+
+    .card:hover { border-color: var(--color-ink-subtle); }
+
+    .card-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 0.5rem;
+      background: var(--color-accent-light);
+      color: var(--color-accent);
       display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
+      align-items: center;
       justify-content: center;
-      margin-bottom: 2rem;
-    }
-    .standards span {
-      font-size: 0.78rem;
-      font-weight: 500;
-      color: var(--muted);
-      background: var(--code-bg);
-      border: 1px solid var(--border);
-      padding: 0.3rem 0.75rem;
-      border-radius: 20px;
+      font-size: 1.25rem;
+      margin-bottom: var(--space-sm);
     }
 
-    /* Footer */
+    .card h3 {
+      font-size: 1.0625rem;
+      font-weight: 600;
+      margin-bottom: var(--space-xs);
+    }
+
+    .card p {
+      color: var(--color-ink-muted);
+      font-size: 0.9375rem;
+      line-height: 1.6;
+    }
+
+    .card ul {
+      margin-top: var(--space-xs);
+      padding-left: 1.25rem;
+      color: var(--color-ink-muted);
+      font-size: 0.9375rem;
+    }
+
+    .card li + li { margin-top: 0.25rem; }
+
+    /* ── API code block ── */
+    .api-example {
+      background: #0f172a;
+      border-radius: 0.75rem;
+      padding: var(--space-md);
+      overflow-x: auto;
+      margin-top: var(--space-md);
+    }
+
+    .api-example pre {
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      line-height: 1.6;
+      color: #e2e8f0;
+      margin: 0;
+    }
+
+    .api-example .comment { color: #64748b; }
+    .api-example .key { color: #7dd3fc; }
+    .api-example .string { color: #86efac; }
+    .api-example .method { color: #c4b5fd; }
+
+    /* ── Spec list ── */
+    .spec-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .spec {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-md);
+      padding: var(--space-md);
+      border: 1px solid var(--color-border);
+      border-radius: 0.75rem;
+      transition: border-color 0.15s;
+    }
+
+    .spec:hover { border-color: var(--color-ink-subtle); }
+
+    .spec-name {
+      font-family: var(--font-mono);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--color-ink);
+    }
+
+    .spec-desc {
+      color: var(--color-ink-muted);
+      font-size: 0.9375rem;
+      margin-top: 0.25rem;
+    }
+
+    .spec-tag {
+      display: inline-block;
+      padding: 0.125rem 0.5rem;
+      border-radius: 1rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: var(--color-accent-light);
+      color: var(--color-accent);
+      margin-top: 0.5rem;
+    }
+
+    /* ── Open banner ── */
+    .open-banner {
+      background: var(--color-surface-alt);
+      border: 1px solid var(--color-border);
+      border-radius: 0.75rem;
+      padding: var(--space-md);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+
+    .open-banner-text h3 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .open-banner-text p {
+      color: var(--color-ink-muted);
+      font-size: 0.9375rem;
+    }
+
+    /* ── Footer ── */
     footer {
-      padding: 1.5rem 2rem;
-      border-top: 1px solid var(--border);
-      text-align: center;
-      color: var(--muted);
-      font-size: 0.8rem;
+      border-top: 1px solid var(--color-border);
+      padding: var(--space-lg) 0;
+      color: var(--color-ink-muted);
+      font-size: 0.875rem;
     }
-    footer a { color: var(--accent); text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
 
-    @media (max-width: 640px) {
-      header { flex-direction: column; gap: 0.75rem; }
-      .cards { grid-template-columns: 1fr; }
+    footer .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+
+    footer a { color: var(--color-ink-muted); }
+    footer a:hover { color: var(--color-ink); }
+
+    .footer-links { display: flex; gap: var(--space-md); }
+
+    .lei-badge {
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      color: var(--color-ink-subtle);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      section { padding: var(--space-lg) 0; }
+      .hero { padding: var(--space-lg) 0 var(--space-md); }
+      .spec { flex-direction: column; gap: var(--space-xs); }
+      .open-banner { flex-direction: column; text-align: center; }
+      footer .container { flex-direction: column; text-align: center; }
+      .grid-2 { grid-template-columns: 1fr; }
     }
   </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header>
-    <a href="/" class="logo">attestto<span>.</span></a>
-    <nav>
-      <a href="https://spec.attestto.com/did-sns/">Specification</a>
-      <a href="https://github.com/Attestto-com">GitHub</a>
-      <a href="mailto:standards@attestto.com">Contact</a>
-    </nav>
-  </header>
 
-  <main class="hero">
-    <h1>Identity infrastructure for <em>regulated environments</em></h1>
-    <p>Decentralized identity anchored to Solana Name Service. W3C-conformant DID resolution, verifiable credentials with selective disclosure, and issuer-signed attestations for institutional use cases.</p>
-
-    <div class="standards">
-      <span>W3C DID v1.1</span>
-      <span>SD-JWT Selective Disclosure</span>
-      <span>Solana Name Service</span>
-      <span>Solana Attestation Service</span>
-      <span>DIDComm v2</span>
-      <span>GLEIF vLEI</span>
+  <!-- Nav -->
+  <nav>
+    <div class="container">
+      <a href="/" class="nav-brand">attestto</a>
+      <ul class="nav-links">
+        <li><a href="#apis">APIs</a></li>
+        <li><a href="#signing">Signing</a></li>
+        <li><a href="#governance">Governance</a></li>
+        <li><a href="#platform">Platform</a></li>
+        <li><a href="#standards">Standards</a></li>
+        <li><a href="https://attestto.org">Attestto Open</a></li>
+      </ul>
     </div>
+  </nav>
 
-    <div class="cards">
-      <a class="card" href="https://spec.attestto.com/did-sns/">
-        <div class="tag">Specification</div>
-        <h3>did:sns Method</h3>
-        <p>Name-anchored DIDs on Solana. Human-readable, hierarchically-controlled, with issuer-signed proof via SAS.</p>
-      </a>
-      <a class="card" href="https://github.com/Attestto-com/did-sns-resolver">
-        <div class="tag">Open Source</div>
-        <h3>DID Resolver</h3>
-        <p>Reference implementation with DIF Universal Resolver driver. TypeScript, zero framework dependencies.</p>
-      </a>
-      <a class="card" href="https://spec.attestto.com/did-sns/report/">
-        <div class="tag">Conformance</div>
-        <h3>Implementation Report</h3>
-        <p>186 tests across 7 W3C DID Core specification sections. Full CRUD coverage.</p>
-      </a>
-      <a class="card" href="https://spec.attestto.com/did-sns/charter/">
-        <div class="tag">Governance</div>
-        <h3>Community Charter</h3>
-        <p>Open contribution model under the W3C Software and Document License. Apache 2.0 for implementations.</p>
-      </a>
-      <a class="card" href="https://github.com/Attestto-com/vLei-Solana-Bridge">
-        <div class="tag">Open Source</div>
-        <h3>vLEI Solana Bridge</h3>
-        <p>On-chain vLEI credential attestation. Groth16 zero-knowledge proofs with soulbound, non-transferable PDAs.</p>
-      </a>
-      <a class="card" href="https://spec.attestto.com/attestto-id/">
-        <div class="tag">Specification</div>
-        <h3>Attestto ID</h3>
-        <p>Tiered identity credential. Platform-verified to self-sovereign with soulbound tokens and dual-key encryption.</p>
-      </a>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <h1>Issue, verify, and sign — at scale</h1>
+      <p class="lead">
+        Credential issuance APIs. Document signing with legal validity.
+        Governance infrastructure for organizations.
+        Built on open standards, anchored on-chain.
+      </p>
+      <div class="hero-actions">
+        <a href="https://github.com/Attestto-com" class="btn btn-primary">View on GitHub</a>
+        <a href="#apis" class="btn btn-secondary">Explore APIs</a>
+      </div>
     </div>
+  </section>
 
-    <div class="standards">
-      <span>LEI: 9845008661B99CC9FD07</span>
+  <!-- APIs -->
+  <section id="apis">
+    <div class="container">
+      <div class="section-label">APIs</div>
+      <h2 class="section-title">Credential infrastructure as an API</h2>
+      <p class="section-desc">
+        Issue verifiable credentials, verify presentations, manage revocation,
+        and enforce selective disclosure. One integration, any credential type.
+      </p>
+      <div class="grid-2">
+        <div>
+          <div class="grid-3" style="grid-template-columns: 1fr;">
+            <div class="card">
+              <h3>Issue</h3>
+              <p>Issue W3C Verifiable Credentials signed with Ed25519 or P-256. SD-JWT selective disclosure built in. Schema-validated, blockchain-anchored.</p>
+            </div>
+            <div class="card">
+              <h3>Verify</h3>
+              <p>Verify credentials and presentations in real-time. Three-layer verification — institutional, registry, ledger. Any two of three sufficient.</p>
+            </div>
+            <div class="card">
+              <h3>Revoke</h3>
+              <p>Revocation lists on-chain and off-chain. Status checks without contacting the issuer. Offline-capable verification.</p>
+            </div>
+            <div class="card">
+              <h3>Present</h3>
+              <p>OpenID4VP presentations. Selective disclosure — verifiers see only what's needed. Zero-knowledge predicates for range proofs.</p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="api-example">
+            <pre><span class="comment">// Issue a verifiable credential</span>
+<span class="key">const</span> credential = <span class="key">await</span> attestto.<span class="method">issue</span>({
+  <span class="key">type</span>: <span class="string">'DrivingLicense'</span>,
+  <span class="key">subject</span>: <span class="string">'did:web:citizen.example'</span>,
+  <span class="key">claims</span>: {
+    <span class="key">category</span>: <span class="string">'B'</span>,
+    <span class="key">issuedDate</span>: <span class="string">'2026-04-02'</span>,
+    <span class="key">expiresAt</span>: <span class="string">'2031-04-02'</span>,
+  },
+  <span class="key">disclosure</span>: <span class="string">'selective'</span>,
+  <span class="key">anchor</span>: <span class="string">'solana:mainnet'</span>,
+});
+
+<span class="comment">// Verify a presentation</span>
+<span class="key">const</span> result = <span class="key">await</span> attestto.<span class="method">verify</span>({
+  <span class="key">presentation</span>: vp,
+  <span class="key">requiredType</span>: <span class="string">'DrivingLicense'</span>,
+  <span class="key">checkRevocation</span>: <span class="key">true</span>,
+});</pre>
+          </div>
+        </div>
+      </div>
     </div>
-  </main>
+  </section>
 
+  <!-- Document Signing -->
+  <section id="signing">
+    <div class="container">
+      <div class="section-label">Document Signing</div>
+      <h2 class="section-title">Sign documents with legal validity</h2>
+      <p class="section-desc">
+        Multiple signing methods — from simple electronic to legally binding digital signatures.
+        Every method produces a verifiable, tamper-evident document.
+      </p>
+      <div class="grid-4">
+        <div class="card">
+          <h3>Firma Digital</h3>
+          <p>PKCS#11 integration with Costa Rica's national PKI (BCCR/SINPE). Legal equivalence under Ley 8454.</p>
+        </div>
+        <div class="card">
+          <h3>Web3 Wallet</h3>
+          <p>Sign with Solana wallet (Phantom, Backpack). Ed25519 signature anchored on-chain. Verifiable forever.</p>
+        </div>
+        <div class="card">
+          <h3>Mobile Passkey</h3>
+          <p>FIDO2 WebAuthn signing from phone. Biometric-gated, device-bound. No passwords, no tokens.</p>
+        </div>
+        <div class="card">
+          <h3>PDF Attestation</h3>
+          <p>Signed PDFs with embedded QR verification. Tamper-evident hash, blockchain anchor, human-readable proof.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Governance -->
+  <section id="governance">
+    <div class="container">
+      <div class="section-label">Governance</div>
+      <h2 class="section-title">Organization infrastructure on-chain</h2>
+      <p class="section-desc">
+        Corporate governance primitives — from cap tables to multisig vaults.
+        Transparent, auditable, cryptographically enforced.
+      </p>
+      <div class="grid-3">
+        <div class="card">
+          <h3>Multisig Vaults</h3>
+          <p>Squads v4 on Solana. 2-of-3 or custom thresholds. Protect domains, assets, and signing keys. No single point of failure.</p>
+        </div>
+        <div class="card">
+          <h3>Org Structure</h3>
+          <p>Departments, designations, branches. Role-based access control derived from on-chain membership. KYB-verified entities.</p>
+        </div>
+        <div class="card">
+          <h3>Cap Table</h3>
+          <p>Ownership percentages, governance groups, voting thresholds. Transparent equity structure for DAOs and traditional orgs.</p>
+        </div>
+        <div class="card">
+          <h3>Approval Flows</h3>
+          <p>Multi-step approval workflows with audit trail. Document signing, transfers, member changes — all gated by governance rules.</p>
+        </div>
+        <div class="card">
+          <h3>Domain Governance</h3>
+          <p>SNS domain delegation, subdomain leasing, transfer protection. Class key co-signing prevents unauthorized transfers.</p>
+        </div>
+        <div class="card">
+          <h3>Audit Logs</h3>
+          <p>Every governance action logged with actor, timestamp, and cryptographic proof. Immutable. Exportable. Compliant.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Platform -->
+  <section id="platform">
+    <div class="container">
+      <div class="section-label">Platform</div>
+      <h2 class="section-title">Everything else you need</h2>
+      <p class="section-desc">
+        Identity verification, treasury management, compliance tooling,
+        and a credential wallet — all integrated.
+      </p>
+      <div class="grid-4">
+        <div class="card">
+          <h3>KYC / KYB</h3>
+          <p>Identity and business verification. Document AI, PEP/sanctions screening, UBO analysis. Approval workflows.</p>
+        </div>
+        <div class="card">
+          <h3>Treasury</h3>
+          <p>USDC/EURC wallets, Circle integration, CCTP bridge, settlement batching. Org-scoped, audited.</p>
+        </div>
+        <div class="card">
+          <h3>Credential Wallet</h3>
+          <p>Browser extension + dashboard. Store, present, and share verifiable credentials. Selective disclosure UI.</p>
+        </div>
+        <div class="card">
+          <h3>Compliance</h3>
+          <p>Fraud detection, KYT screening, circuit breakers. Risk scoring with velocity checks and impossible travel detection.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Standards -->
+  <section id="standards">
+    <div class="container">
+      <div class="section-label">Standards</div>
+      <h2 class="section-title">Open specifications and conformance</h2>
+      <p class="section-desc">
+        Everything we build conforms to international standards.
+        Every spec is public. Every implementation is open source.
+      </p>
+      <div class="spec-list">
+        <a href="https://spec.attestto.com/did-sns/" class="spec">
+          <div>
+            <div class="spec-name">did:sns Method Specification</div>
+            <div class="spec-desc">Name-anchored DIDs on Solana. Human-readable, hierarchically-controlled, with issuer-signed proof via SAS.</div>
+            <span class="spec-tag">W3C DID v1.1</span>
+          </div>
+        </a>
+        <a href="https://spec.attestto.com/did-sns/report/" class="spec">
+          <div>
+            <div class="spec-name">Implementation Report</div>
+            <div class="spec-desc">186 tests across 7 W3C DID Core specification sections. Full CRUD coverage.</div>
+            <span class="spec-tag">Conformance</span>
+          </div>
+        </a>
+        <a href="https://spec.attestto.com/attestto-id/" class="spec">
+          <div>
+            <div class="spec-name">Attestto ID Specification</div>
+            <div class="spec-desc">Tiered identity credential. Platform-verified to self-sovereign with soulbound tokens and dual-key encryption.</div>
+            <span class="spec-tag">Identity</span>
+          </div>
+        </a>
+        <a href="https://github.com/Attestto-com/vLei-Solana-Bridge" class="spec">
+          <div>
+            <div class="spec-name">vLEI Solana Bridge</div>
+            <div class="spec-desc">On-chain vLEI credential attestation. Groth16 zero-knowledge proofs with soulbound, non-transferable PDAs.</div>
+            <span class="spec-tag">GLEIF vLEI</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Built on Attestto Open -->
+  <section id="open">
+    <div class="container">
+      <div class="open-banner">
+        <div class="open-banner-text">
+          <h3>Built on Attestto Open</h3>
+          <p>Open digital public infrastructure. Sovereign, interoperable, privacy-preserving. No vendor lock-in.</p>
+        </div>
+        <a href="https://attestto.org" class="btn btn-secondary">attestto.org</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
   <footer>
-    <p>&copy; 2026 Attestto &middot; <a href="mailto:standards@attestto.com">standards@attestto.com</a> &middot; LEI <a href="https://search.gleif.org/#/record/9845008661B99CC9FD07">9845008661B99CC9FD07</a></p>
+    <div class="container">
+      <div>
+        <span>Attestto</span>
+        <span class="lei-badge"> · LEI <a href="https://search.gleif.org/#/record/9845008661B99CC9FD07">9845008661B99CC9FD07</a></span>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/Attestto-com">GitHub</a>
+        <a href="https://attestto.org">Attestto Open</a>
+        <a href="mailto:hello@attestto.com">Contact</a>
+      </div>
+    </div>
   </footer>
+
 </body>
 </html>
