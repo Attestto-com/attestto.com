@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Attestto — Issue, verify, and sign at scale</title>
-  <meta name="description" content="Credential issuance APIs, document signing, governance infrastructure. Built on open standards. W3C DID, Verifiable Credentials, Solana.">
+  <title>Attestto — Identity, signing, and governance infrastructure</title>
+  <meta name="description" content="Identity verification, document signing, governance infrastructure, treasury, and compliance. Built on open standards, anchored on-chain.">
   <meta name="theme-color" content="#0f172a">
-  <meta property="og:title" content="Attestto — Issue, verify, and sign at scale">
-  <meta property="og:description" content="Credential issuance APIs, document signing, governance infrastructure. Built on open standards.">
+  <meta property="og:title" content="Attestto — Identity, signing, and governance infrastructure">
+  <meta property="og:description" content="Identity verification, document signing, governance infrastructure, treasury, and compliance. Built on open standards.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://attestto.com">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="icon" type="image/jpeg" href="/favicon.jpg">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -23,6 +24,8 @@
       --color-border: #e2e8f0;
       --color-accent: #1e40af;
       --color-accent-light: #dbeafe;
+      --color-dark: #0f172a;
+      --color-dark-border: rgba(255, 255, 255, 0.08);
       --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
       --max-width: 72rem;
@@ -53,15 +56,48 @@
     }
 
     section { padding: var(--space-xl) 0; }
-    section + section { border-top: 1px solid var(--color-border); }
+
+    /* ── Section themes ── */
+    .section-light {
+      background: var(--color-surface-alt);
+      color: var(--color-ink);
+    }
+
+    .section-dark {
+      background: var(--color-dark);
+      color: #ffffff;
+    }
+
+    .section-dark .section-label { color: #7dd3fc; }
+    .section-dark .section-title { color: #ffffff; }
+    .section-dark .section-desc { color: rgba(255, 255, 255, 0.6); }
+
+    .section-dark .card {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: var(--color-dark-border);
+    }
+
+    .section-dark .card h3 { color: #ffffff; }
+    .section-dark .card p { color: rgba(255, 255, 255, 0.6); }
+
+    .section-dark .spec {
+      border-color: var(--color-dark-border);
+    }
+
+    .section-dark .spec-name { color: #ffffff; }
+    .section-dark .spec-desc { color: rgba(255, 255, 255, 0.6); }
+    .section-dark .spec-tag {
+      background: rgba(125, 211, 252, 0.15);
+      color: #7dd3fc;
+    }
 
     /* ── Nav ── */
     nav {
       position: sticky;
       top: 0;
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(15, 23, 42, 0.97);
       backdrop-filter: blur(8px);
-      border-bottom: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-dark-border);
       z-index: 100;
       padding: var(--space-sm) 0;
     }
@@ -75,7 +111,7 @@
     .nav-brand {
       font-weight: 700;
       font-size: 1.125rem;
-      color: var(--color-ink);
+      color: #ffffff;
       letter-spacing: -0.02em;
     }
 
@@ -86,29 +122,32 @@
     }
 
     .nav-links a {
-      color: var(--color-ink-muted);
+      color: rgba(255, 255, 255, 0.7);
       font-size: 0.9375rem;
       font-weight: 500;
       transition: color 0.15s;
     }
 
-    .nav-links a:hover { color: var(--color-ink); text-decoration: none; }
+    .nav-links a:hover { color: #ffffff; text-decoration: none; }
 
     /* ── Hero ── */
-    .hero { padding: var(--space-xl) 0 var(--space-lg); border-top: none; }
+    .hero {
+      padding: var(--space-xl) 0 var(--space-lg);
+      background: var(--color-dark);
+    }
 
     .hero h1 {
       font-size: clamp(2.25rem, 5vw, 3.5rem);
       font-weight: 800;
       line-height: 1.15;
       letter-spacing: -0.03em;
-      color: var(--color-ink);
+      color: #ffffff;
       max-width: 48rem;
     }
 
     .hero .lead {
       font-size: 1.25rem;
-      color: var(--color-ink-muted);
+      color: rgba(255, 255, 255, 0.6);
       max-width: 40rem;
       margin-top: var(--space-md);
       line-height: 1.6;
@@ -149,6 +188,28 @@
     }
 
     .btn-secondary:hover { background: var(--color-surface-alt); text-decoration: none; }
+
+    /* Button overrides for dark backgrounds */
+    .hero .btn-primary,
+    .section-dark .btn-primary {
+      background: #ffffff;
+      color: #0f172a;
+    }
+
+    .hero .btn-primary:hover,
+    .section-dark .btn-primary:hover { background: #e2e8f0; }
+
+    .hero .btn-secondary,
+    .section-dark .btn-secondary {
+      color: rgba(255, 255, 255, 0.8);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .hero .btn-secondary:hover,
+    .section-dark .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+    }
 
     /* ── Sections ── */
     .section-label {
@@ -198,22 +259,6 @@
       border: 1px solid var(--color-border);
       border-radius: 0.75rem;
       background: var(--color-surface);
-      transition: border-color 0.15s;
-    }
-
-    .card:hover { border-color: var(--color-ink-subtle); }
-
-    .card-icon {
-      width: 2.5rem;
-      height: 2.5rem;
-      border-radius: 0.5rem;
-      background: var(--color-accent-light);
-      color: var(--color-accent);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.25rem;
-      margin-bottom: var(--space-sm);
     }
 
     .card h3 {
@@ -237,13 +282,36 @@
 
     .card li + li { margin-top: 0.25rem; }
 
+    .badge-soon {
+      display: inline-block;
+      padding: 0.125rem 0.5rem;
+      border-radius: 1rem;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      background: rgba(125, 211, 252, 0.15);
+      color: #0ea5e9;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }
+
+    .section-dark .badge-soon {
+      background: rgba(125, 211, 252, 0.15);
+      color: #7dd3fc;
+    }
+
     /* ── API code block ── */
     .api-example {
-      background: #0f172a;
+      background: #1e293b;
       border-radius: 0.75rem;
       padding: var(--space-md);
       overflow-x: auto;
       margin-top: var(--space-md);
+    }
+
+    .section-light .api-example {
+      background: var(--color-dark);
     }
 
     .api-example pre {
@@ -278,6 +346,8 @@
 
     .spec:hover { border-color: var(--color-ink-subtle); }
 
+    .section-dark .spec:hover { border-color: rgba(255, 255, 255, 0.2); }
+
     .spec-name {
       font-family: var(--font-mono);
       font-size: 0.9375rem;
@@ -304,8 +374,8 @@
 
     /* ── Open banner ── */
     .open-banner {
-      background: var(--color-surface-alt);
-      border: 1px solid var(--color-border);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--color-dark-border);
       border-radius: 0.75rem;
       padding: var(--space-md);
       display: flex;
@@ -319,18 +389,20 @@
       font-size: 1.125rem;
       font-weight: 600;
       margin-bottom: 0.25rem;
+      color: #ffffff;
     }
 
     .open-banner-text p {
-      color: var(--color-ink-muted);
+      color: rgba(255, 255, 255, 0.6);
       font-size: 0.9375rem;
     }
 
     /* ── Footer ── */
     footer {
-      border-top: 1px solid var(--color-border);
+      background: var(--color-dark);
+      border-top: 1px solid var(--color-dark-border);
       padding: var(--space-lg) 0;
-      color: var(--color-ink-muted);
+      color: rgba(255, 255, 255, 0.5);
       font-size: 0.875rem;
     }
 
@@ -342,16 +414,19 @@
       gap: var(--space-sm);
     }
 
-    footer a { color: var(--color-ink-muted); }
-    footer a:hover { color: var(--color-ink); }
+    footer a { color: rgba(255, 255, 255, 0.5); }
+    footer a:hover { color: #ffffff; }
 
     .footer-links { display: flex; gap: var(--space-md); }
 
     .lei-badge {
       font-family: var(--font-mono);
       font-size: 0.8125rem;
-      color: var(--color-ink-subtle);
+      color: rgba(255, 255, 255, 0.35);
     }
+
+    .lei-badge a { color: rgba(255, 255, 255, 0.35); }
+    .lei-badge a:hover { color: #ffffff; }
 
     /* ── Responsive ── */
     @media (max-width: 768px) {
@@ -373,12 +448,12 @@
   <!-- Nav -->
   <nav>
     <div class="container">
-      <a href="/" class="nav-brand"><img src="/logo.svg" alt="Attestto" style="height: 2rem; vertical-align: middle;"></a>
+      <a href="/" class="nav-brand"><img src="/logo-full-white.svg" alt="Attestto" style="height: 2rem; vertical-align: middle;"></a>
       <ul class="nav-links">
-        <li><a href="#apis">APIs</a></li>
+        <li><a href="#platform">Platform</a></li>
         <li><a href="#signing">Signing</a></li>
         <li><a href="#governance">Governance</a></li>
-        <li><a href="#platform">Platform</a></li>
+        <li><a href="#apis">APIs</a></li>
         <li><a href="#standards">Standards</a></li>
         <li><a href="https://attestto.org">Attestto Open</a></li>
       </ul>
@@ -388,21 +463,134 @@
   <!-- Hero -->
   <section class="hero">
     <div class="container">
-      <h1>Issue, verify, and sign — at scale</h1>
+      <h1>Identity, signing, and governance — one platform</h1>
       <p class="lead">
-        Credential issuance APIs. Document signing with legal validity.
-        Governance infrastructure for organizations.
-        Built on open standards, anchored on-chain.
+        Verify identities. Sign documents with legal validity. Govern organizations on-chain.
+        Treasury, compliance, and credentials — all integrated. Built on open standards.
       </p>
       <div class="hero-actions">
-        <a href="https://github.com/Attestto-com" class="btn btn-primary">View on GitHub</a>
-        <a href="#apis" class="btn btn-secondary">Explore APIs</a>
+        <a href="#platform" class="btn btn-primary">Explore the platform</a>
+        <a href="https://github.com/Attestto-com" class="btn btn-secondary">View on GitHub</a>
       </div>
     </div>
   </section>
 
-  <!-- APIs -->
-  <section id="apis">
+  <!-- Platform (light) -->
+  <section id="platform" class="section-light">
+    <div class="container">
+      <div class="section-label">Platform</div>
+      <h2 class="section-title">Everything you need to operate at scale</h2>
+      <p class="section-desc">
+        Identity verification, document signing, treasury management, compliance tooling,
+        and a credential wallet — integrated into a single platform.
+      </p>
+      <div class="grid-3">
+        <div class="card">
+          <h3>KYC / KYB</h3>
+          <p>Identity and business verification. Document AI, PEP/sanctions screening, UBO analysis. Approval workflows with risk scoring.</p>
+        </div>
+        <div class="card">
+          <h3>Document Signing</h3>
+          <p>Multiple signing methods — Firma Digital, Web3 wallet, mobile passkey. Every method produces a verifiable, tamper-evident document.</p>
+        </div>
+        <div class="card">
+          <h3>Governance</h3>
+          <p>Multisig vaults, org structure, cap tables, approval flows. Transparent, auditable, cryptographically enforced.</p>
+        </div>
+        <div class="card">
+          <h3>Treasury</h3>
+          <p>USDC/EURC wallets, Circle integration, CCTP bridge, settlement batching. Org-scoped, fully audited.</p>
+        </div>
+        <div class="card">
+          <h3>Credential Wallet</h3>
+          <p>Browser extension + dashboard. Store, present, and share verifiable credentials. Selective disclosure built in.</p>
+        </div>
+        <div class="card">
+          <h3>Compliance</h3>
+          <p>Fraud detection, sanctions screening, circuit breakers. Velocity checks and impossible travel detection.</p>
+        </div>
+        <div class="card">
+          <h3>LEI Issuance & Maintenance <span class="badge-soon">Coming soon</span></h3>
+          <p>Legal Entity Identifier issuance and annual maintenance. GLEIF-compliant, automated renewal, integrated with KYB verification.</p>
+        </div>
+        <div class="card">
+          <h3>Digital Currency Rails <span class="badge-soon">Coming soon</span></h3>
+          <p>Stablecoin rails — USDC/EURC on-ramp, off-ramp, and minting. Cross-border settlement and fiat conversion. CRCD digital colón proof of concept for local currency tokenization.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Document Signing (dark) -->
+  <section id="signing" class="section-dark">
+    <div class="container">
+      <div class="section-label">Document Signing</div>
+      <h2 class="section-title">Sign documents with legal validity</h2>
+      <p class="section-desc">
+        Multiple signing methods — from simple electronic to legally binding digital signatures.
+        Every method produces a verifiable, tamper-evident document.
+      </p>
+      <div class="grid-4">
+        <div class="card">
+          <h3>Firma Digital</h3>
+          <p>PKCS#11 integration with Costa Rica's national PKI (BCCR/SINPE). Legal equivalence under Ley 8454.</p>
+        </div>
+        <div class="card">
+          <h3>Web3 Wallet</h3>
+          <p>Sign with Solana wallet (Phantom, Backpack). Ed25519 signature anchored on-chain. Verifiable forever.</p>
+        </div>
+        <div class="card">
+          <h3>Mobile Passkey</h3>
+          <p>FIDO2 WebAuthn signing from phone. Biometric-gated, device-bound. No passwords, no tokens.</p>
+        </div>
+        <div class="card">
+          <h3>PDF Attestation</h3>
+          <p>Signed PDFs with embedded QR verification. Tamper-evident hash, blockchain anchor, human-readable proof.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Governance (light) -->
+  <section id="governance" class="section-light">
+    <div class="container">
+      <div class="section-label">Governance</div>
+      <h2 class="section-title">Organization infrastructure on-chain</h2>
+      <p class="section-desc">
+        Corporate governance primitives — from cap tables to multisig vaults.
+        Transparent, auditable, cryptographically enforced.
+      </p>
+      <div class="grid-3">
+        <div class="card">
+          <h3>Multisig Vaults</h3>
+          <p>Squads v4 on Solana. 2-of-3 or custom thresholds. Protect domains, assets, and signing keys. No single point of failure.</p>
+        </div>
+        <div class="card">
+          <h3>Org Structure</h3>
+          <p>Departments, designations, branches. Role-based access control derived from on-chain membership. KYB-verified entities.</p>
+        </div>
+        <div class="card">
+          <h3>Cap Table</h3>
+          <p>Ownership percentages, governance groups, voting thresholds. Transparent equity structure for DAOs and traditional orgs.</p>
+        </div>
+        <div class="card">
+          <h3>Approval Flows</h3>
+          <p>Multi-step approval workflows with audit trail. Document signing, transfers, member changes — all gated by governance rules.</p>
+        </div>
+        <div class="card">
+          <h3>Domain Governance</h3>
+          <p>SNS domain delegation, subdomain leasing, transfer protection. Class key co-signing prevents unauthorized transfers.</p>
+        </div>
+        <div class="card">
+          <h3>Audit Logs</h3>
+          <p>Every governance action logged with actor, timestamp, and cryptographic proof. Immutable. Exportable. Compliant.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- APIs (dark) -->
+  <section id="apis" class="section-dark">
     <div class="container">
       <div class="section-label">APIs</div>
       <h2 class="section-title">Credential infrastructure as an API</h2>
@@ -458,106 +646,8 @@
     </div>
   </section>
 
-  <!-- Document Signing -->
-  <section id="signing">
-    <div class="container">
-      <div class="section-label">Document Signing</div>
-      <h2 class="section-title">Sign documents with legal validity</h2>
-      <p class="section-desc">
-        Multiple signing methods — from simple electronic to legally binding digital signatures.
-        Every method produces a verifiable, tamper-evident document.
-      </p>
-      <div class="grid-4">
-        <div class="card">
-          <h3>Firma Digital</h3>
-          <p>PKCS#11 integration with Costa Rica's national PKI (BCCR/SINPE). Legal equivalence under Ley 8454.</p>
-        </div>
-        <div class="card">
-          <h3>Web3 Wallet</h3>
-          <p>Sign with Solana wallet (Phantom, Backpack). Ed25519 signature anchored on-chain. Verifiable forever.</p>
-        </div>
-        <div class="card">
-          <h3>Mobile Passkey</h3>
-          <p>FIDO2 WebAuthn signing from phone. Biometric-gated, device-bound. No passwords, no tokens.</p>
-        </div>
-        <div class="card">
-          <h3>PDF Attestation</h3>
-          <p>Signed PDFs with embedded QR verification. Tamper-evident hash, blockchain anchor, human-readable proof.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Governance -->
-  <section id="governance">
-    <div class="container">
-      <div class="section-label">Governance</div>
-      <h2 class="section-title">Organization infrastructure on-chain</h2>
-      <p class="section-desc">
-        Corporate governance primitives — from cap tables to multisig vaults.
-        Transparent, auditable, cryptographically enforced.
-      </p>
-      <div class="grid-3">
-        <div class="card">
-          <h3>Multisig Vaults</h3>
-          <p>Squads v4 on Solana. 2-of-3 or custom thresholds. Protect domains, assets, and signing keys. No single point of failure.</p>
-        </div>
-        <div class="card">
-          <h3>Org Structure</h3>
-          <p>Departments, designations, branches. Role-based access control derived from on-chain membership. KYB-verified entities.</p>
-        </div>
-        <div class="card">
-          <h3>Cap Table</h3>
-          <p>Ownership percentages, governance groups, voting thresholds. Transparent equity structure for DAOs and traditional orgs.</p>
-        </div>
-        <div class="card">
-          <h3>Approval Flows</h3>
-          <p>Multi-step approval workflows with audit trail. Document signing, transfers, member changes — all gated by governance rules.</p>
-        </div>
-        <div class="card">
-          <h3>Domain Governance</h3>
-          <p>SNS domain delegation, subdomain leasing, transfer protection. Class key co-signing prevents unauthorized transfers.</p>
-        </div>
-        <div class="card">
-          <h3>Audit Logs</h3>
-          <p>Every governance action logged with actor, timestamp, and cryptographic proof. Immutable. Exportable. Compliant.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Platform -->
-  <section id="platform">
-    <div class="container">
-      <div class="section-label">Platform</div>
-      <h2 class="section-title">Everything else you need</h2>
-      <p class="section-desc">
-        Identity verification, treasury management, compliance tooling,
-        and a credential wallet — all integrated.
-      </p>
-      <div class="grid-4">
-        <div class="card">
-          <h3>KYC / KYB</h3>
-          <p>Identity and business verification. Document AI, PEP/sanctions screening, UBO analysis. Approval workflows.</p>
-        </div>
-        <div class="card">
-          <h3>Treasury</h3>
-          <p>USDC/EURC wallets, Circle integration, CCTP bridge, settlement batching. Org-scoped, audited.</p>
-        </div>
-        <div class="card">
-          <h3>Credential Wallet</h3>
-          <p>Browser extension + dashboard. Store, present, and share verifiable credentials. Selective disclosure UI.</p>
-        </div>
-        <div class="card">
-          <h3>Compliance</h3>
-          <p>Fraud detection, sanctions screening, circuit breakers. Risk scoring with velocity checks and impossible travel detection.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Standards -->
-  <section id="standards">
+  <!-- Standards (light) -->
+  <section id="standards" class="section-light">
     <div class="container">
       <div class="section-label">Standards</div>
       <h2 class="section-title">Open specifications and conformance</h2>
@@ -598,8 +688,8 @@
     </div>
   </section>
 
-  <!-- Built on Attestto Open -->
-  <section id="open">
+  <!-- Built on Attestto Open (dark) -->
+  <section id="open" class="section-dark">
     <div class="container">
       <div class="open-banner">
         <div class="open-banner-text">
