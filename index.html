@@ -3,13 +3,164 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Attestto — Identity, signing, and governance infrastructure</title>
-  <meta name="description" content="Identity verification, document signing, governance infrastructure, treasury, and compliance. Built on open standards, anchored on-chain.">
+  <title>Attestto — Sovereign identity infrastructure</title>
+  <meta name="description" content="Open-source infrastructure for verifiable credentials and decentralized identity. Verify documents, issue credentials, bridge national PKIs. Built on W3C and IETF standards.">
   <meta name="theme-color" content="#0f172a">
-  <meta property="og:title" content="Attestto — Identity, signing, and governance infrastructure">
-  <meta property="og:description" content="Identity verification, document signing, governance infrastructure, treasury, and compliance. Built on open standards.">
+  <meta property="og:title" content="Attestto — Sovereign identity infrastructure">
+  <meta property="og:description" content="Open-source infrastructure for verifiable credentials and decentralized identity. Verify documents, issue credentials, bridge national PKIs. Built on W3C and IETF standards.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://attestto.com">
+  <meta property="og:site_name" content="Attestto">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="es_CR">
+  <meta property="og:image" content="https://attestto.com/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Attestto — Sovereign identity infrastructure">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Attestto — Sovereign identity infrastructure">
+  <meta name="twitter:description" content="Open-source infrastructure for verifiable credentials and decentralized identity. Built on W3C and IETF standards.">
+  <meta name="twitter:image" content="https://attestto.com/og-image.png">
+
+  <!-- Canonical & hreflang -->
+  <link rel="canonical" href="https://attestto.com">
+  <link rel="alternate" hreflang="en" href="https://attestto.com">
+  <link rel="alternate" hreflang="es" href="https://attestto.com/es">
+  <link rel="alternate" hreflang="x-default" href="https://attestto.com">
+
+  <!-- Robots & Keywords -->
+  <meta name="robots" content="index, follow">
+  <meta name="keywords" content="verifiable credentials, decentralized identity, DID, digital public infrastructure, DPI, sovereign identity, verify document, W3C DID, did:pki, did:sns, credential wallet, open source identity, identity infrastructure, LATAM identity, Costa Rica identity">
+
+  <!-- Structured Data: Organization -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Attestto",
+    "url": "https://attestto.com",
+    "logo": "https://attestto.com/logo.svg",
+    "description": "Identity verification, document signing, governance infrastructure, and compliance. Built on open standards, anchored on-chain.",
+    "foundingLocation": {
+      "@type": "Place",
+      "addressCountry": "CR"
+    },
+    "leiCode": "9845008661B99CC9FD07",
+    "sameAs": [
+      "https://attestto.org",
+      "https://github.com/Attestto-com"
+    ],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "technical support",
+      "url": "https://attestto.com"
+    }
+  }
+  </script>
+
+  <!-- Structured Data: WebSite -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Attestto",
+    "url": "https://attestto.com",
+    "description": "Identity verification, document signing, and governance infrastructure built on open standards.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Attestto",
+      "url": "https://attestto.com"
+    }
+  }
+  </script>
+
+  <!-- Structured Data: SoftwareApplication -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Attestto Platform",
+    "url": "https://attestto.com",
+    "description": "Privacy-preserving identity, document signing, on-chain governance, and credential infrastructure. Built on W3C DIDs, Verifiable Credentials, and Solana.",
+    "applicationCategory": "BusinessApplication",
+    "applicationSubCategory": "Identity Infrastructure",
+    "operatingSystem": "Web, iOS, Android, Chrome Extension",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD",
+      "description": "Contact for enterprise pricing"
+    },
+    "author": {
+      "@type": "Organization",
+      "name": "Attestto",
+      "url": "https://attestto.com"
+    },
+    "featureList": [
+      "Decentralized Identifier (DID) infrastructure",
+      "W3C Verifiable Credentials issuance and verification",
+      "Zero-Knowledge Proof identity predicates",
+      "Document signing with legal validity",
+      "On-chain governance and DAO treasury",
+      "Solana blockchain anchoring",
+      "Chrome Extension credential wallet",
+      "API-first credential infrastructure"
+    ]
+  }
+  </script>
+
+  <!-- Structured Data: FAQPage (triggers FAQ rich snippets) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is Attestto?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Attestto is identity, signing, and governance infrastructure built on open standards. It provides decentralized identifiers (DIDs), W3C Verifiable Credentials, document signing with legal validity, and on-chain governance — all anchored on Solana."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What standards does Attestto support?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Attestto supports W3C Decentralized Identifiers (DID Core), W3C Verifiable Credentials Data Model, OpenID for Verifiable Credential Issuance (OIDC4VCI), Presentation Exchange, BBS+ Signatures, and eIDAS 2.0 alignment."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does Attestto differ from traditional KYC?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Traditional KYC centralizes personal data at each verifier. Attestto uses Zero-Knowledge Proofs and Verifiable Credentials — users prove attributes (age, residency, accreditation) without revealing raw data, reducing breach risk and regulatory exposure."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does Attestto work in Latin America and Costa Rica?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Attestto is founded in Costa Rica and supports Spanish-language interfaces. It integrates with LATAM identity and compliance workflows, including firma digital (digital signature) standards and cross-border credential recognition."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is there an API for developers?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Attestto provides an API-first credential infrastructure with endpoints for DID resolution, credential issuance, presentation verification, and ZKP predicate evaluation."
+        }
+      }
+    ]
+  }
+  </script>
+
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="icon" type="image/jpeg" href="/favicon.jpg">
   <style>
