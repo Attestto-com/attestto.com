@@ -1,0 +1,548 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Grid from '../components/Grid.astro';
+import Card from '../components/Card.astro';
+import Button from '../components/Button.astro';
+import SpecItem from '../components/SpecItem.astro';
+import OpenBanner from '../components/OpenBanner.astro';
+import RepoPill from '../components/RepoPill.astro';
+import ShipStatus from '../components/ShipStatus.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog', ({ data }) => import.meta.env.PROD ? !data.draft : true))
+  .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime())
+  .slice(0, 3);
+
+// FAQPage schema — Google Rich Snippets target
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What is Attestto?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Attestto is digital identity infrastructure built on open standards from W3C, NIST, ISO, and IETF. It provides Decentralized Identifiers (DIDs), W3C Verifiable Credentials, document signing with legal validity, and identity assurance classification via the IEAL specification. Attestto Inc. is a Delaware C-Corporation founded in Costa Rica.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What standards does Attestto align with?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Attestto aligns with W3C Decentralized Identifiers (DID Core v1.0), W3C Verifiable Credentials Data Model 2.0, NIST Special Publication 800-63-4 (Digital Identity Guidelines, final 2025-07-31), ISO/IEC 30107-3 (Presentation Attack Detection), and IETF standards for JWT, JWS, and COSE. Attestto authors public specifications for did:sns, did:pki, and IEAL under Creative Commons Attribution 4.0.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How does Attestto differ from traditional KYC?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Traditional KYC re-collects raw personal data at each verifier, concentrating breach risk. Attestto uses W3C Verifiable Credentials with selective disclosure so subjects can prove attributes without revealing raw source data. Per-event consent is treated as normative, consistent with NIST SP 800-63C section 4.6.1.3.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Does Attestto work in Latin America and Costa Rica?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. Attestto is founded in Costa Rica and integrates with the national Firma Digital PKI (BCCR / SINPE / MICITT). Spanish is a first-class language across all citizen-facing surfaces. LATAM adoption is the primary go-to-market focus.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is there a specification for developers?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. Public specifications live at spec.attestto.com. Current publications include did:sns (DID method anchored to Solana Name Service), did:pki (DID method for national PKI hierarchies), and IEAL v0.1 (Identity Evidence Assurance Level, three-axis compositional model). All specifications are Creative Commons Attribution 4.0. Reference JSON Schemas and code samples are Apache License 2.0.',
+      },
+    },
+  ],
+};
+
+// SoftwareApplication schema
+const softwareSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Attestto Platform',
+  url: 'https://attestto.com',
+  description: 'Digital identity infrastructure — verifiable credentials, document signing, identity assurance classification. Standards-aligned with W3C, NIST, ISO, and IETF.',
+  applicationCategory: 'BusinessApplication',
+  applicationSubCategory: 'Identity Infrastructure',
+  operatingSystem: 'Web, iOS, Android, Chrome Extension',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+    description: 'Contact for enterprise pricing and pilot programs',
+  },
+  author: {
+    '@type': 'Organization',
+    name: 'Attestto',
+    url: 'https://attestto.com',
+  },
+  featureList: [
+    'W3C Verifiable Credentials issuance and verification',
+    'Decentralized Identifier (DID) infrastructure',
+    'Document signing with legal validity (PAdES, Firma Digital)',
+    'Identity assurance classification via IEAL specification',
+    'Presentation Attack Detection vendor integration',
+    'Selective disclosure via SD-JWT and BBS+',
+    'Solana blockchain anchoring for tamper-evident timestamps',
+    'Browser extension credential wallet',
+    'Standards-track public specifications',
+  ],
+};
+---
+<BaseLayout
+  title="Attestto"
+  description="Digital identity infrastructure on open standards. Verifiable credentials, document signing, identity assurance classification. Aligned with NIST 800-63-4, W3C VC, ISO 30107-3."
+  lang="en"
+  jsonLd={[faqSchema, softwareSchema]}
+>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <h1>Identity, signing, and governance. Standards-first, privacy-preserving by design.</h1>
+      <p class="lead">
+        Verify identities. Sign documents with legal validity. Classify identity evidence with the
+        IEAL specification. Built on open standards from W3C, NIST, ISO, and IETF. Vendor-neutral,
+        specification-driven, publicly auditable.
+      </p>
+      <div class="hero-actions">
+        <Button variant="primary" href="#platform">Explore the platform</Button>
+        <Button variant="secondary" href="https://github.com/Attestto-com" external>View on GitHub</Button>
+      </div>
+
+      <div class="hero-doors">
+        <a href="/personas" class="door">
+          <span class="door-label">For citizens →</span>
+          <span class="door-detail">Your Digital ID. <span class="mono">/personas</span></span>
+        </a>
+        <a href="/firma-digital" class="door">
+          <span class="door-label">For organizations →</span>
+          <span class="door-detail">Firma Digital. IEAL. <span class="mono">/firma-digital</span></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Platform -->
+  <Section variant="light" id="platform">
+    <SectionHead
+      label="Platform"
+      title="Identity infrastructure, integrated"
+      desc='Verifiable credentials, document signing, credential wallet, and assurance classification. Every feature carries an honest ship-status label (hover any badge for details, or see the full roadmap for definitions).'
+    />
+    <Grid cols={3}>
+      <Card>
+        <h3>Credential Wallet <ShipStatus status="shipped" /></h3>
+        <p>Digital ID credential wallet across three surfaces. Browser extension for web verification, desktop app for signing keys outside the browser TCB, mobile app for biometric capture and presentation. Store, present, and share credentials with selective disclosure. SD-JWT + JSON-LD, DIDComm v2, Shamir 2-of-3 recovery. Extension: shipped. Desktop and mobile apps: in progress.</p>
+        <div class="card-pills">
+          <RepoPill href="https://app.attestto.com" label="app.attestto.com" type="live" />
+          <RepoPill href="https://github.com/Attestto-com/id-wallet-adapter" label="id-wallet-adapter" type="github" />
+        </div>
+      </Card>
+      <Card>
+        <h3>Document Signing <ShipStatus status="shipped" /></h3>
+        <p>PDF signing with tamper-evident hash, QR verification, and Solana timestamp anchor. Firma Digital verification (Costa Rica national PKI) works today. Signing and verifying are available across all surfaces: browser extension, desktop app, and mobile app. Signing pipeline evolves per the roadmap.</p>
+        <div class="card-pills">
+          <RepoPill href="https://verify.attestto.com" label="verify.attestto.com" type="live" />
+          <RepoPill href="https://github.com/Attestto-com/vc-sdk" label="vc-sdk" type="github" />
+        </div>
+      </Card>
+      <Card>
+        <h3>Verify Web Components <ShipStatus status="shipped" /></h3>
+        <p>Drop-in JavaScript components for document verification. No login, no backend, no data transmitted. Apache 2.0 open source.</p>
+        <div class="card-pills">
+          <RepoPill href="https://verify.attestto.com" label="verify.attestto.com" type="live" />
+          <RepoPill href="https://github.com/Attestto-com/attestto-verify" label="attestto-verify" type="github" />
+        </div>
+      </Card>
+      <Card>
+        <h3>KYC / KYB <ShipStatus status="in-progress" /></h3>
+        <p>Identity and business verification with document AI, sanctions screening, and beneficial ownership analysis. Integration path shipping under CORTEX API. Approval workflows in build.</p>
+      </Card>
+      <Card>
+        <h3>Identity Assurance (IEAL) <ShipStatus status="in-progress" /></h3>
+        <p>Three-axis classification of identity evidence (Capture, Algorithm, Storage) with composite levels L0 through L6. Aligned with NIST SP 800-63-4. Working Draft v0.1 published. Vendor integrations customer-triggered.</p>
+      </Card>
+      <Card>
+        <h3>Treasury <ShipStatus status="planned" /></h3>
+        <p>USDC and EURC wallets with Circle integration and CCTP bridge for cross-border settlement. Organization-scoped, fully audited, and integrated with governance approvals. Planned 2026 Q4.</p>
+      </Card>
+      <Card>
+        <h3>LEI Issuance <ShipStatus status="planned" /></h3>
+        <p>Legal Entity Identifier issuance and annual maintenance, GLEIF-compatible. Integrated with KYB verification. Planned 2027.</p>
+      </Card>
+      <Card>
+        <h3>Digital Currency Rails <ShipStatus status="planned" /></h3>
+        <p>Stablecoin on-ramp, off-ramp, and cross-border settlement rails. Costa Rica CRCD digital colón proof of concept pending BCCR partnership. Planned 2027+.</p>
+      </Card>
+    </Grid>
+  </Section>
+
+  <!-- Document Signing -->
+  <Section variant="dark" id="signing">
+    <SectionHead
+      label="Document Signing"
+      title="Sign with legal validity"
+      desc="Multiple signing methods, from simple electronic to legally binding digital signatures. Every method produces a verifiable, tamper-evident document with an on-chain timestamp anchor."
+    />
+    <Grid cols={4}>
+      <Card>
+        <h3>Firma Digital <ShipStatus status="in-progress" /></h3>
+        <p><strong>Verify: shipped. Sign: in progress.</strong> PKCS#11 integration with Costa Rica's national PKI (BCCR / SINPE). Legal equivalence under Ley 8454.</p>
+      </Card>
+      <Card>
+        <h3>Web3 Wallet <ShipStatus status="shipped" /></h3>
+        <p>Sign with Solana wallet (Phantom, Backpack, Solflare). Ed25519 signature anchored on-chain. Verifiable forever.</p>
+      </Card>
+      <Card>
+        <h3>Mobile Passkey <ShipStatus status="in-progress" /></h3>
+        <p><strong>Auth: shipped. Signing: in progress.</strong> FIDO2 WebAuthn from phone. Biometric-gated, device-bound. No passwords, no tokens. End-to-end signing pipeline in build.</p>
+      </Card>
+      <Card>
+        <h3>PDF Attestation <ShipStatus status="shipped" /></h3>
+        <p>Signed PDFs with embedded QR verification. Tamper-evident hash and Solana anchor. Any PDF viewer opens the document; verification requires no Attestto infrastructure.</p>
+      </Card>
+    </Grid>
+  </Section>
+
+  <!-- Governance -->
+  <Section variant="light" id="governance">
+    <SectionHead
+      label="Governance"
+      title="Organization infrastructure"
+      desc="Corporate governance primitives from audit logs to multi-party approval workflows. Where cryptographic enforcement makes sense, we anchor it. Ship status is labeled honestly."
+    />
+    <Grid cols={3}>
+      <Card>
+        <h3>Audit Logs <ShipStatus status="shipped" /></h3>
+        <p>Every governance action logged with actor, timestamp, and cryptographic proof. Anchored on Solana for immutability. Exportable for compliance.</p>
+      </Card>
+      <Card>
+        <h3>Domain Governance <ShipStatus status="in-progress" /></h3>
+        <p>Attestto controls the go-cr.sol, or-cr.sol, and sa-cr.sol namespaces on Solana Name Service. Subdomain delegation via did:sns method specification. Public spec at spec.attestto.com/did-sns.</p>
+      </Card>
+      <Card>
+        <h3>Approval Flows <ShipStatus status="in-progress" /></h3>
+        <p>Multi-step approval workflows with audit trail. Currently deployed for KYC and document-signing flows in CORTEX. Broader governance workflows on the roadmap.</p>
+      </Card>
+      <Card>
+        <h3>Multisig Vaults <ShipStatus status="planned" /></h3>
+        <p>Solana Squads v4 integration. 2-of-3 or custom thresholds for vault key recovery. Product-level governance multisig planned 2026 Q4.</p>
+      </Card>
+      <Card>
+        <h3>Org Structure <ShipStatus status="planned" /></h3>
+        <p>Departments, roles, and branches with role-based access control. Traditional org tenancy shipped in CORTEX; on-chain org membership planned 2027.</p>
+      </Card>
+      <Card>
+        <h3>Cap Table <ShipStatus status="research" /></h3>
+        <p>On-chain ownership percentages and voting thresholds. Research-only. Interest depends on regulatory clarity for on-chain equity structures.</p>
+      </Card>
+    </Grid>
+  </Section>
+
+  <!-- APIs -->
+  <Section variant="dark" id="apis">
+    <SectionHead
+      label="APIs and SDKs"
+      title="Credential infrastructure as an API"
+      desc="Issue verifiable credentials, verify presentations, manage revocation. Open-source SDKs on GitHub today. Hosted API endpoints roll out in phases."
+    />
+    <Grid cols={4}>
+      <Card>
+        <h3>Issue <ShipStatus status="shipped" /></h3>
+        <p>Issue W3C Verifiable Credentials signed with Ed25519 or P-256. SD-JWT selective disclosure built in. Schema-validated, optionally Solana-anchored.</p>
+        <RepoPill href="https://github.com/Attestto-com/vc-sdk" label="Attestto-com/vc-sdk" type="github" />
+      </Card>
+      <Card>
+        <h3>Verify <ShipStatus status="shipped" /></h3>
+        <p>Verify credentials and presentations in real-time. Three-layer verification: institutional trust anchor, registry lookup, ledger anchor. Any two-of-three sufficient.</p>
+        <RepoPill href="https://github.com/Attestto-com/attestto-verify" label="Attestto-com/attestto-verify" type="github" />
+      </Card>
+      <Card>
+        <h3>Present <ShipStatus status="in-progress" /></h3>
+        <p>OpenID for Verifiable Presentations (OpenID4VP). Selective disclosure via SD-JWT so verifiers see only what is needed. Zero-knowledge predicates on the research roadmap.</p>
+        <RepoPill href="https://github.com/Attestto-com/id-wallet-adapter" label="Attestto-com/id-wallet-adapter" type="github" />
+      </Card>
+      <Card>
+        <h3>Revoke <ShipStatus status="in-progress" /></h3>
+        <p>Revocation status lists on-chain and off-chain. Status checks without contacting the issuer. Offline-capable verification in build.</p>
+        <RepoPill href="https://github.com/Attestto-com/vc-sdk" label="Attestto-com/vc-sdk" type="github" />
+      </Card>
+    </Grid>
+  </Section>
+
+  <!-- Standards -->
+  <Section variant="light" id="standards">
+    <SectionHead
+      label="Standards"
+      title="Open specifications and conformance"
+      desc="Everything we build conforms to international standards. Every specification is public. Every implementation is open source. All specification text is Creative Commons Attribution 4.0."
+    />
+    <div class="spec-list">
+      <SpecItem
+        href="https://spec.attestto.com/did-sns/"
+        name="did:sns Method Specification"
+        desc="DID method anchored to Solana Name Service. Human-readable aliases, cross-border interoperable, key rotation without identity loss."
+        tag="W3C DID v1.0"
+      />
+      <SpecItem
+        href="https://spec.attestto.com/did-sns/report/"
+        name="did:sns Implementation Report"
+        desc="186 tests across 7 W3C DID Core specification sections. Full CRUD coverage."
+        tag="Conformance"
+      />
+      <SpecItem
+        href="https://spec.attestto.com/ieal"
+        name="IEAL Specification"
+        desc="Identity Evidence Assurance Level. Three-axis compositional model (Capture, Algorithm, Storage) with composite levels L0 through L6. Aligned with NIST SP 800-63-4."
+        tag="Assurance"
+      />
+      <SpecItem
+        href="https://spec.attestto.com/ieal/crosswalks/nist-800-63"
+        name="IEAL to NIST 800-63-4 Crosswalk"
+        desc="Informative mapping of IEAL axes and composite levels to NIST 800-63A, 800-63B, and 800-63C controls. Not endorsed by NIST."
+        tag="Crosswalk"
+      />
+      <SpecItem
+        href="https://spec.attestto.com/vcp/"
+        name="VCP Specification"
+        desc="Verifiable Content Provenance. Embed-first signed metadata envelope for PDF, JPEG, or sidecar. Natural carrier for IEAL claims. Reference implementation at @attestto/vcp."
+        tag="Content Envelope"
+      />
+      <SpecItem
+        href="https://spec.attestto.com/did-pki"
+        name="did:pki Method Specification"
+        desc="DID method for national PKI hierarchies. Bridges Certificate Authorities to the DID ecosystem for standards-aligned trust anchoring."
+        tag="W3C DID"
+      />
+      <SpecItem
+        href="https://github.com/Attestto-com/vLei-Solana-Bridge"
+        name="vLEI Solana Bridge"
+        desc="On-chain vLEI credential attestation. Groth16 zero-knowledge proofs with soulbound, non-transferable Program Derived Accounts. Deployed to Solana mainnet."
+        tag="GLEIF vLEI"
+      />
+    </div>
+  </Section>
+
+  <!-- From the blog -->
+  {posts.length > 0 && (
+    <Section variant="plain">
+      <div class="blog-header">
+        <SectionHead label="Blog" title="Notes from the build" />
+        <a href="/blog" class="all-posts-link">All posts →</a>
+      </div>
+      <Grid cols={3}>
+        {posts.map((post) => (
+          <a href={`/blog/${post.slug}/`} class="post-card">
+            <div class="post-meta">
+              {post.data.tags[0] && <span>{post.data.tags[0].toUpperCase()}</span>}
+              <span aria-hidden="true">·</span>
+              <time datetime={post.data.publishDate.toISOString()}>
+                {new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(post.data.publishDate)}
+              </time>
+            </div>
+            <h3>{post.data.title}</h3>
+            <p>{post.data.description}</p>
+          </a>
+        ))}
+      </Grid>
+    </Section>
+  )}
+
+  <!-- Built on Attestto Open -->
+  <Section variant="dark" id="open">
+    <OpenBanner
+      title="Built on Attestto Open"
+      desc="Open digital public infrastructure. Sovereign, interoperable, privacy-preserving. No vendor lock-in."
+      ctaHref="https://attestto.org"
+      ctaLabel="attestto.org"
+      external
+    />
+  </Section>
+</BaseLayout>
+
+<style>
+  /* ---- Hero ---- */
+  .hero {
+    padding-block: var(--space-xl) var(--space-lg);
+    background: var(--color-dark);
+    color: #ffffff;
+  }
+
+  .hero h1 {
+    font-size: var(--text-hero-size);
+    font-weight: 800;
+    line-height: var(--text-hero-line);
+    letter-spacing: -0.03em;
+    color: #ffffff;
+    max-width: 48rem;
+  }
+
+  .hero .lead {
+    font-size: var(--text-body-lg-size);
+    color: var(--text-on-dark-muted);
+    max-width: 40rem;
+    margin-block-start: var(--space-md);
+    line-height: var(--text-body-lg-line);
+  }
+
+  .hero-actions {
+    margin-block-start: var(--space-md);
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+
+  .hero-doors {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-sm);
+    margin-block-start: var(--space-lg);
+    max-width: 40rem;
+  }
+
+  .door {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-md);
+    border: 1px solid var(--color-dark-border);
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.03);
+    text-decoration: none;
+    transition: border-color 0.15s, background 0.15s;
+  }
+
+  .door:hover {
+    border-color: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.06);
+    text-decoration: none;
+  }
+
+  .door-label {
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 1.125rem;
+  }
+
+  .door-detail {
+    color: var(--text-on-dark-muted);
+    font-size: var(--text-small-size);
+    margin-block-start: 0.25rem;
+  }
+
+  .door .mono {
+    font-family: var(--font-mono);
+    color: var(--color-dark-sky);
+  }
+
+  @media (min-width: 640px) {
+    .hero-doors { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ---- Platform section — pills row at bottom of card ---- */
+  .card-pills {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+    margin-block-start: auto;
+    padding-block-start: var(--space-sm);
+  }
+
+  /* ---- APIs section — repo source link on each card ---- */
+  .card-source {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--color-dark-sky);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    margin-block-start: auto;
+    padding-block-start: var(--space-2);
+  }
+
+  .card-source code {
+    color: inherit;
+    background: none;
+    padding: 0;
+    border: none;
+    font-size: inherit;
+  }
+
+  .card-source:hover {
+    text-decoration: underline;
+    color: #ffffff;
+  }
+
+  /* ---- Standards spec list ---- */
+  .spec-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  /* ---- Blog teaser section ---- */
+  .blog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-md);
+    margin-block-end: var(--space-md);
+    flex-wrap: wrap;
+  }
+
+  .all-posts-link {
+    color: var(--link-color);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: var(--text-small-size);
+  }
+
+  .post-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-md);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--surface-card);
+    text-decoration: none;
+    transition: border-color 0.15s;
+  }
+
+  .post-card:hover {
+    border-color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .post-meta {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs-size);
+    color: var(--text-muted);
+  }
+
+  .post-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  .post-card p {
+    color: var(--text-secondary);
+    font-size: var(--text-small-size);
+    line-height: 1.5;
+    margin: 0;
+  }
+</style>

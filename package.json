@@ -1,0 +1,29 @@
+{
+  "name": "attestto.com",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "check": "astro build && node scripts/check-quality.mjs",
+    "check:only": "node scripts/check-quality.mjs"
+  },
+  "dependencies": {
+    "astro": "^5.0.0",
+    "@astrojs/sitemap": "^3.2.1",
+    "@astrojs/mdx": "^4.0.0",
+    "@astrojs/rss": "^4.0.9",
+    "@fontsource/inter": "^5.1.0",
+    "@fontsource/ibm-plex-serif": "^5.1.0",
+    "@fontsource/jetbrains-mono": "^5.1.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "typescript": "^5.7.0"
+  },
+  "packageManager": "pnpm@9.12.0"
+}

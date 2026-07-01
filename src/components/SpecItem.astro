@@ -1,0 +1,97 @@
+---
+/**
+ * <SpecItem> — standards list item. Ports OLD `.spec` component.
+ * Renders a linked block with mono spec name + description + tag pill.
+ */
+interface Props {
+  href: string;
+  name: string;
+  desc: string;
+  tag?: string;
+  external?: boolean;
+}
+
+const { href, name, desc, tag, external = false } = Astro.props;
+const rel = external || href.startsWith('http') ? 'noopener' : undefined;
+const target = external || href.startsWith('http') ? '_blank' : undefined;
+---
+<a href={href} rel={rel} target={target} class="spec">
+  <div class="spec-body">
+    <div class="spec-name">{name}</div>
+    <div class="spec-desc">{desc}</div>
+    {tag && <span class="spec-tag">{tag}</span>}
+  </div>
+</a>
+
+<style>
+  .spec {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    transition: border-color 0.15s;
+    background: var(--surface-card);
+  }
+
+  .spec:hover {
+    border-color: var(--color-ink-subtle);
+    text-decoration: none;
+  }
+
+  .spec-body { flex: 1; }
+
+  .spec-name {
+    font-family: var(--font-mono);
+    font-size: var(--text-small-size);
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .spec-desc {
+    color: var(--text-secondary);
+    font-size: var(--text-small-size);
+    margin-block-start: 0.25rem;
+    line-height: 1.5;
+  }
+
+  .spec-tag {
+    display: inline-block;
+    padding: 0.125rem 0.5rem;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    margin-block-start: 0.5rem;
+  }
+
+  /* Dark section context */
+  :global(.section-dark) .spec {
+    border-color: var(--color-dark-border);
+    background: transparent;
+  }
+  :global(.section-dark) .spec:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+  :global(.section-dark) .spec-name {
+    color: #ffffff;
+  }
+  :global(.section-dark) .spec-desc {
+    color: var(--text-on-dark-muted);
+  }
+  :global(.section-dark) .spec-tag {
+    background: var(--color-dark-sky-bg);
+    color: var(--color-dark-sky);
+  }
+
+  @media (max-width: 640px) {
+    .spec {
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+  }
+</style>

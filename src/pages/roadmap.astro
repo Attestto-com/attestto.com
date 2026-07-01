@@ -1,0 +1,376 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Grid from '../components/Grid.astro';
+import Card from '../components/Card.astro';
+import ShipStatus from '../components/ShipStatus.astro';
+import RepoPill from '../components/RepoPill.astro';
+---
+<BaseLayout
+  title="Roadmap"
+  description="Attestto public roadmap. What has shipped, what is in progress, what is planned, what is under research. Every line item carries an honest ship-status label."
+  lang="en"
+>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <p class="eyebrow">Public roadmap</p>
+      <h1>What we shipped. What we are building. What is next.</h1>
+      <p class="lead">
+        Every line item below carries a ship-status label so adopters, grant reviewers, and pitch
+        audiences can plan against verifiable state. When something moves between statuses, this
+        page updates on the same commit. Nothing is labeled "shipped" until it is publicly usable.
+      </p>
+    </div>
+  </section>
+
+  <!-- SHIPPED -->
+  <Section variant="light" id="shipped">
+    <SectionHead
+      label="Shipped"
+      title="Available today"
+      desc="Currently publicly usable. Every item below has a public repository, a public deployment, or a published specification. This is the credibility floor for grants and pitches."
+    />
+    <Grid cols={2}>
+      <Card>
+        <h3>did:sns Method Specification <ShipStatus status="shipped" /></h3>
+        <p>W3C DID method anchored to Solana Name Service. Full CRUD spec, 186-test implementation report, deployed at spec.attestto.com/did-sns.</p>
+        <RepoPill href="https://spec.attestto.com/did-sns/" label="spec.attestto.com/did-sns" type="spec" />
+      </Card>
+      <Card>
+        <h3>vLEI Solana Bridge <ShipStatus status="shipped" /></h3>
+        <p>Anchor program with Groth16 zero-knowledge proofs and soulbound Program Derived Accounts. Deployed to Solana mainnet at GLEif8Rf1NFiuGPXxD7n3sakuNH6SZPFfoZMg1pBVEFm.</p>
+        <RepoPill href="https://github.com/Attestto-com/vLei-Solana-Bridge" label="Attestto-com/vLei-Solana-Bridge" type="github" />
+      </Card>
+      <Card>
+        <h3>Verifiable Credentials SDK <ShipStatus status="shipped" /></h3>
+        <p>W3C VC 2.0 SDK at attestto-com/vc-sdk. Any credential type, any DID method, Ed25519 or P-256. Costa Rica extension SDK at attestto-com/cr-vc-sdk with 11 credential types.</p>
+        <RepoPill href="https://github.com/Attestto-com/vc-sdk" label="Attestto-com/vc-sdk" type="github" />
+      </Card>
+      <Card>
+        <h3>Credential Wallet Extension <ShipStatus status="shipped" /></h3>
+        <p>Browser extension at Attestto-com/attestto-creds-extension. SD-JWT and JSON-LD VCs, DIDComm v2 messaging, Shamir 2-of-3 recovery, AES-256-GCM vault.</p>
+        <RepoPill href="https://github.com/Attestto-com/attestto-creds-extension" label="Attestto-com/attestto-creds-extension" type="github" />
+      </Card>
+      <Card>
+        <h3>Verify Web Components <ShipStatus status="shipped" /></h3>
+        <p>Drop-in JavaScript components for document verification at verify.attestto.com. Apache 2.0, no login, no backend, no data transmitted.</p>
+        <RepoPill href="https://verify.attestto.com" label="verify.attestto.com" type="live" />
+      </Card>
+      <Card>
+        <h3>PDF Signing and Verification <ShipStatus status="shipped" /></h3>
+        <p>PDF engine with PAdES-B / T / LT signing, QR embed, and Solana anchoring. Powers attestto-desktop and third-party integrations.</p>
+        <RepoPill href="https://github.com/Attestto-com/attestto-verify" label="Attestto-com/attestto-verify" type="github" />
+      </Card>
+      <Card>
+        <h3>Attestto Anchor Service <ShipStatus status="shipped" /></h3>
+        <p>Federation-ready HTTP service for anchoring content hashes to Solana via the Memo program with Merkle batching. Clone-and-deploy.</p>
+        <RepoPill href="https://github.com/Attestto-com/attestto-anchor" label="Attestto-com/attestto-anchor" type="github" />
+      </Card>
+      <Card>
+        <h3>Trust Anchor Mirror <ShipStatus status="shipped" /></h3>
+        <p>Independent public mirror of national PKI trust roots at attestto-com/attestto-trust. Costa Rica Firma Digital first, multi-country roadmap.</p>
+        <RepoPill href="https://github.com/Attestto-com/attestto-trust" label="Attestto-com/attestto-trust" type="github" />
+      </Card>
+      <Card>
+        <h3>Attestto Desktop <ShipStatus status="shipped" /></h3>
+        <p>Sovereign identity desktop application with SQLCipher-backed vault, mandatory Shamir 2-of-3 guardian recovery, offline verification.</p>
+        <RepoPill href="https://github.com/Attestto-com/attestto-desktop" label="Attestto-com/attestto-desktop" type="github" />
+      </Card>
+      <Card>
+        <h3>DID Resolvers (did:sns, did:pki) <ShipStatus status="shipped" /></h3>
+        <p>Standalone and unified DIF Universal Resolver drivers. HTTP API compliant. Deployable independently or under one service.</p>
+        <RepoPill href="https://github.com/Attestto-com/attestto-did-resolver" label="Attestto-com/attestto-did-resolver" type="github" />
+      </Card>
+      <Card>
+        <h3>VCP CLI (Verifiable Content Provenance) <ShipStatus status="shipped" /></h3>
+        <p>Embed-first content envelope CLI. Signs and verifies vcp metadata blocks inside PDF, JPEG, or a sidecar for any file. Ed25519 + JCS RFC 8785. Natural carrier for IEAL claims. Working Draft v0.1 spec + reference implementation.</p>
+        <div class="card-pills">
+          <RepoPill href="https://spec.attestto.com/vcp/" label="spec.attestto.com/vcp" type="spec" />
+          <RepoPill href="https://github.com/Attestto-com/vcp-cli" label="Attestto-com/vcp-cli" type="github" />
+        </div>
+      </Card>
+    </Grid>
+  </Section>
+
+  <!-- IN PROGRESS -->
+  <Section variant="dark" id="in-progress">
+    <SectionHead
+      label="In progress"
+      title="Building now (2026 H2)"
+      desc="Actively under construction. Timelines are best-effort and may shift based on customer pilots or grant milestones. Nothing here is currently shippable in production."
+    />
+    <Grid cols={2}>
+      <Card>
+        <h3>IEAL Specification v0.1 <ShipStatus status="in-progress" /></h3>
+        <p>Identity Evidence Assurance Level. Three-axis compositional model published as a Working Draft. Standards-community engagement at W3C CCG and DIF planned. NIST SP 800-63-4 crosswalk drafted.</p>
+        <RepoPill href="https://spec.attestto.com/ieal" label="spec.attestto.com/ieal" type="spec" />
+      </Card>
+      <Card>
+        <h3>did:pki Method Specification <ShipStatus status="in-progress" /></h3>
+        <p>W3C DID method for national PKI hierarchies. Draft v0.1.0 with active W3C DID methods registry pull request.</p>
+        <RepoPill href="https://github.com/Attestto-com/did-pki-spec" label="Attestto-com/did-pki-spec" type="github" />
+      </Card>
+      <Card>
+        <h3>Firma Digital PKCS#11 Signing <ShipStatus status="in-progress" /></h3>
+        <p>Complete the Costa Rica national signing path. Verify path is shipped; signing pipeline integrates with BCCR PKCS#11 tokens.</p>
+      </Card>
+      <Card>
+        <h3>PAdES-LTA with Solana Anchor <ShipStatus status="in-progress" /></h3>
+        <p>Long-term archival PDF signing with Solana replacing the traditional Timestamp Authority. Embeds cert chain, DID doc snapshot, and Solana receipt in the PDF Document Security Store.</p>
+        <RepoPill href="https://github.com/Attestto-com/attestto-verify" label="Attestto-com/attestto-verify" type="github" />
+      </Card>
+      <Card>
+        <h3>Attestto Mobile PWA <ShipStatus status="in-progress" /></h3>
+        <p>Companion mobile app for camera-attested capture. Pairs with desktop via QR over local network for two-device flows.</p>
+        <RepoPill href="https://github.com/Attestto-com/attestto-mobile" label="Attestto-com/attestto-mobile" type="github" />
+      </Card>
+      <Card>
+        <h3>Sovereign Pass SBT <ShipStatus status="in-progress" /></h3>
+        <p>Non-transferable soulbound token proving verified identity after KYC. Public metadata schema at attestto-com/sovereign-pass-metadata.</p>
+        <RepoPill href="https://github.com/Attestto-com/sovereign-pass-metadata" label="Attestto-com/sovereign-pass-metadata" type="github" />
+      </Card>
+      <Card>
+        <h3>KYC / KYB API <ShipStatus status="in-progress" /></h3>
+        <p>Identity and business verification with document AI, sanctions screening, and beneficial ownership analysis. Building under CORTEX platform.</p>
+      </Card>
+      <Card>
+        <h3>OpenID4VP Presentation <ShipStatus status="in-progress" /></h3>
+        <p>OpenID for Verifiable Presentations with selective disclosure via SD-JWT. Full offline-capable revocation status list checking in build.</p>
+        <RepoPill href="https://github.com/Attestto-com/id-wallet-adapter" label="Attestto-com/id-wallet-adapter" type="github" />
+      </Card>
+    </Grid>
+  </Section>
+
+  <!-- PLANNED -->
+  <Section variant="light" id="planned">
+    <SectionHead
+      label="Planned"
+      title="Scheduled (2026 Q4 through 2027)"
+      desc="Committed to build subject to customer or grant triggers. Nothing here is under active construction yet. Priority ordering reflects current pipeline; specific quarters may shift."
+    />
+    <Grid cols={2}>
+      <Card>
+        <h3>Play Integrity + App Attest <ShipStatus status="planned" /></h3>
+        <p>Android Play Integrity API and Apple App Attest integration in attestto-mobile for hardware-attested capture. Enables IEAL Capture axis values C1 and C2. Priority P2 per IEAL implementation roadmap.</p>
+      </Card>
+      <Card>
+        <h3>PAD Vendor Integrations <ShipStatus status="planned" /></h3>
+        <p>ISO/IEC 30107-3 certified PAD provider integrations for IEAL Algorithm axis values A3 and A4. Customer-triggered per vendor-neutrality policy. Mitek, iProov, FaceTec are candidate integrations.</p>
+      </Card>
+      <Card>
+        <h3>.attestto Container Format <ShipStatus status="planned" /></h3>
+        <p>File envelope carrying encrypted witnesses, VC commitments, attestation blobs, and access-control policies for institutional dual storage. Design ADR pending, follow-on to IEAL v0.1.</p>
+      </Card>
+      <Card>
+        <h3>Multi-stablecoin Treasury Rails <ShipStatus status="planned" /></h3>
+        <p>Stablecoin-agnostic treasury infrastructure. USDC and EURC via Circle CCTP, USDG via the Global Dollar Network, and OUSD (Open Standard consortium, Solana-native, launching late 2026) as it matures. Rail selection follows regional partner and merchant preference, not vendor lock-in. Organization-scoped, governance-approval-gated, settlement batching supported.</p>
+      </Card>
+      <Card>
+        <h3>Squads Multisig Vaults <ShipStatus status="planned" /></h3>
+        <p>Product-level governance multisig on Solana Squads v4. 2-of-3 or custom thresholds for domain, asset, and signing-key custody.</p>
+      </Card>
+      <Card>
+        <h3>LEI Issuance and Maintenance <ShipStatus status="planned" /></h3>
+        <p>Legal Entity Identifier issuance and annual maintenance for Attestto Inc.'s own entity chain first, then a public issuance service. GLEIF-compatible under vLEI framework.</p>
+      </Card>
+      <Card>
+        <h3>Colegio and Notary Onboarding Kit <ShipStatus status="planned" /></h3>
+        <p>Turn-key onboarding for Costa Rica professional colegios (bar, medical, engineering) and notary offices. Ties professional-attestation model to Firma Digital signing.</p>
+      </Card>
+      <Card>
+        <h3>Digital Currency Rails (CRCD) <ShipStatus status="planned" /></h3>
+        <p>Stablecoin on-ramp, off-ramp, and cross-border settlement. Costa Rica digital colón (CRCD) proof of concept depends on BCCR partnership timelines.</p>
+      </Card>
+    </Grid>
+  </Section>
+
+  <!-- RESEARCH -->
+  <Section variant="dark" id="research">
+    <SectionHead
+      label="Research"
+      title="Under exploration (2027+)"
+      desc="Long-horizon research items with no build commitment. Included for transparency about where we think the space is heading. Priority is guided by standards-community direction and customer signals."
+    />
+    <Grid cols={3}>
+      <Card>
+        <h3>Post-Quantum Signing <ShipStatus status="research" /></h3>
+        <p>ML-DSA-65 hybrid signing (NIST FIPS 204). Migration path documented. Shipping target aligned with the industry 2030 timeline for post-quantum readiness.</p>
+      </Card>
+      <Card>
+        <h3>Zero-Knowledge Predicates <ShipStatus status="research" /></h3>
+        <p>Range proofs and set-membership proofs in OpenID4VP presentations. Depends on standardization progress and mobile ZK proving performance.</p>
+      </Card>
+      <Card>
+        <h3>Session-Based IEAL <ShipStatus status="research" /></h3>
+        <p>Extending IEAL from single-capture to session-based continuous assurance. Applicable to remote proctoring, multi-party signing ceremonies, and long-lived KYC sessions.</p>
+      </Card>
+      <Card>
+        <h3>Cross-Jurisdiction Issuer Registry <ShipStatus status="research" /></h3>
+        <p>ToIP Trust Registry Protocol implementation for cross-jurisdiction issuer discovery and trust chain composition. Aligns with HAVID.</p>
+      </Card>
+      <Card>
+        <h3>AI-Mediated Onboarding <ShipStatus status="research" /></h3>
+        <p>Conversational identity provisioning with on-device LLMs. Consciousness Shards architecture. Governed by per-event consent per IEAL Storage axis.</p>
+      </Card>
+      <Card>
+        <h3>On-Chain Cap Table <ShipStatus status="research" /></h3>
+        <p>Regulatory-cleared on-chain equity structures. Blocked on securities-law clarity across LATAM jurisdictions. Watching but not building.</p>
+      </Card>
+    </Grid>
+  </Section>
+
+  <!-- STANDARDS ENGAGEMENT -->
+  <Section variant="light" id="standards-engagement">
+    <SectionHead
+      label="Standards engagement"
+      title="Where we participate"
+      desc="Standards work is core to Attestto's positioning. Publishing specifications and engaging peer standards bodies is not a marketing tactic; it is how the identity infrastructure category matures. Below is our current engagement track."
+    />
+    <Grid cols={2}>
+      <Card>
+        <h3>W3C Credentials Community Group <ShipStatus status="in-progress" /></h3>
+        <p>Active engagement on did:pki registry, did:sns discussion, IEAL peer review, and related identity primitives.</p>
+        <RepoPill href="https://w3c-ccg.github.io/" label="w3c-ccg.github.io" type="ext" />
+      </Card>
+      <Card>
+        <h3>Decentralized Identity Foundation (DIF) <ShipStatus status="in-progress" /></h3>
+        <p>HAVID alignment via peer discussion. IEAL scope introduced as a compositional identity assurance model for DIF adopters.</p>
+        <RepoPill href="https://identity.foundation/" label="identity.foundation" type="ext" />
+      </Card>
+      <Card>
+        <h3>NIST SP 800-63-4 <ShipStatus status="planned" /></h3>
+        <p>NIST 800-63-4 was finalized 2025-07-31. When NIST opens a future revision comment window, IEAL will be part of our submission. Meanwhile we publish an informative crosswalk.</p>
+        <RepoPill href="https://pages.nist.gov/800-63-4/" label="pages.nist.gov/800-63-4" type="ext" />
+      </Card>
+      <Card>
+        <h3>ToIP Trust Registry Protocol <ShipStatus status="research" /></h3>
+        <p>Watching HAVID and TRP developments for interoperability with our federated trust bootstrap model. Long-term direction depends on ToIP publication cadence.</p>
+        <RepoPill href="https://trustoverip.org/" label="trustoverip.org" type="ext" />
+      </Card>
+      <Card>
+        <h3>GLEIF vLEI Framework <ShipStatus status="shipped" /></h3>
+        <p>vLEI Solana Bridge deployed as an on-chain implementation of the GLEIF vLEI Framework. Attestto Inc. LEI issuance and maintenance planned as a follow-on service.</p>
+        <RepoPill href="https://www.gleif.org/en/vlei/introducing-the-vlei-ecosystem-governance-framework" label="gleif.org/vlei" type="ext" />
+      </Card>
+      <Card>
+        <h3>OpenID Foundation (OIDF) <ShipStatus status="planned" /></h3>
+        <p>OpenID4VP and OpenID4VC implementer conformance. Attestto's presentation flow targets full HAIP 1.0 alignment.</p>
+        <RepoPill href="https://openid.net/wg/digital-credentials-protocols/" label="openid.net/wg/dcp" type="ext" />
+      </Card>
+    </Grid>
+  </Section>
+
+  <!-- LEGEND -->
+  <Section variant="plain">
+    <div class="legend">
+      <h2>How to read this roadmap</h2>
+      <ul class="legend-list">
+        <li>
+          <ShipStatus status="shipped" />
+          <span><strong>Shipped</strong>: publicly usable today. Has a public repository, deployment, or published specification.</span>
+        </li>
+        <li>
+          <ShipStatus status="in-progress" />
+          <span><strong>In progress</strong>: under active construction. Timelines are best-effort. Not shippable in production yet.</span>
+        </li>
+        <li>
+          <ShipStatus status="planned" />
+          <span><strong>Planned</strong>: committed subject to customer, grant, or pilot trigger. Not under active construction.</span>
+        </li>
+        <li>
+          <ShipStatus status="research" />
+          <span><strong>Research</strong>: exploratory. No build commitment. Included for transparency about long-horizon direction.</span>
+        </li>
+      </ul>
+      <p class="legend-note">
+        This roadmap is honest about ship status because we would rather ship credibility over hype.
+        A category-defining specification is worth more than a coming-soon claim. If a line item is
+        important to your evaluation, ask us for the current state.
+      </p>
+    </div>
+  </Section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: var(--space-xl) var(--space-lg);
+    background: var(--color-dark);
+    color: #ffffff;
+  }
+
+  .hero .eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs-size);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-dark-sky);
+    margin-block-end: var(--space-sm);
+  }
+
+  .hero h1 {
+    font-size: var(--text-hero-size);
+    font-weight: 800;
+    line-height: var(--text-hero-line);
+    letter-spacing: -0.03em;
+    color: #ffffff;
+    max-width: 44rem;
+  }
+
+  .hero .lead {
+    font-size: var(--text-body-lg-size);
+    color: var(--text-on-dark-muted);
+    max-width: 45rem;
+    margin-block-start: var(--space-md);
+    line-height: var(--text-body-lg-line);
+  }
+
+  .card-pills {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+    margin-block-start: auto;
+    padding-block-start: var(--space-sm);
+  }
+
+  .legend {
+    max-width: 42rem;
+  }
+
+  .legend h2 {
+    font-size: var(--text-h3-size);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    margin-block-end: var(--space-md);
+  }
+
+  .legend-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .legend-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .legend-list strong {
+    color: var(--text-primary);
+  }
+
+  .legend-note {
+    margin-block-start: var(--space-md);
+    color: var(--text-muted);
+    font-size: var(--text-small-size);
+    line-height: 1.6;
+    font-style: italic;
+  }
+</style>

@@ -1,0 +1,46 @@
+---
+/**
+ * <ApiExample> — code block with syntax highlighting via CSS classes.
+ * Ports OLD `.api-example` component.
+ *
+ * Pass code as slot content, or pass a `code` prop for programmatic content.
+ * For inline syntax coloring, wrap tokens in <span class="comment|key|string|method">.
+ */
+interface Props {
+  code?: string;
+}
+
+const { code } = Astro.props;
+---
+<div class="api-example">
+  <pre>{code ? code : <slot />}</pre>
+</div>
+
+<style>
+  .api-example {
+    background: var(--color-dark-alt);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md);
+    overflow-x: auto;
+    margin-block-start: var(--space-md);
+  }
+
+  :global(.section-light) .api-example {
+    background: var(--color-dark);
+  }
+
+  .api-example pre {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: #e2e8f0;
+    margin: 0;
+    white-space: pre;
+  }
+
+  /* Syntax token colors */
+  .api-example :global(.comment) { color: #64748b; }
+  .api-example :global(.key)     { color: #7dd3fc; }
+  .api-example :global(.string)  { color: #86efac; }
+  .api-example :global(.method)  { color: #c4b5fd; }
+</style>

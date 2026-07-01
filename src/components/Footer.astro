@@ -1,0 +1,92 @@
+---
+/**
+ * <Footer> — dark navy footer. Ports OLD site's footer with LEI badge + links.
+ */
+import LEIBadge from './LEIBadge.astro';
+
+interface Props {
+  lang?: 'en' | 'es';
+}
+
+const { lang = 'en' } = Astro.props;
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <span class="brand-name">Attestto</span>
+      <LEIBadge />
+    </div>
+
+    <div class="footer-links">
+      <a href="https://github.com/Attestto-com" rel="noopener" target="_blank">GitHub</a>
+      <a href="https://attestto.org" rel="noopener" target="_blank">Attestto Open</a>
+      <a href="https://spec.attestto.com" rel="noopener" target="_blank">Standards</a>
+      <a href="mailto:hello@attestto.com">Contact</a>
+    </div>
+  </div>
+
+  <div class="container footer-legal">
+    <span>© {year} Attestto Inc., a Delaware C-Corporation.</span>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--color-dark);
+    border-top: 1px solid var(--color-dark-border);
+    padding-block: var(--space-lg);
+    color: rgba(255, 255, 255, 0.5);
+    font-size: var(--text-small-size);
+  }
+
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+
+  .footer-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+
+  .brand-name {
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 600;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+  }
+
+  .site-footer a {
+    color: rgba(255, 255, 255, 0.5);
+    text-decoration: none;
+  }
+
+  .site-footer a:hover {
+    color: #ffffff;
+  }
+
+  .footer-legal {
+    margin-block-start: var(--space-md);
+    padding-block-start: var(--space-sm);
+    border-top: 1px solid var(--color-dark-border);
+    color: rgba(255, 255, 255, 0.35);
+    font-size: var(--text-xs-size);
+  }
+
+  @media (max-width: 640px) {
+    .footer-inner {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+</style>

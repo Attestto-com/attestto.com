@@ -1,0 +1,256 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog', ({ data }) => import.meta.env.PROD ? !data.draft : true))
+  .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime());
+
+// First-paragraph excerpt extraction (up to ~260 chars).
+// Skips headings, frontmatter, code fences, tables — pulls the first real prose paragraph.
+function excerpt(body: string, description: string): string {
+  const paragraphs = body
+    .split('\n\n')
+    .map((p) => p.trim())
+    .filter(
+      (p) =>
+        p &&
+        !p.startsWith('#') &&
+        !p.startsWith('---') &&
+        !p.startsWith('|') &&
+        !p.startsWith('```') &&
+        !p.startsWith('> ')
+    );
+  const raw = paragraphs[0];
+  if (!raw) return description;
+  const clean = raw
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/[*_`]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+  return clean.length > 260 ? clean.slice(0, 257).trim() + '...' : clean;
+}
+
+function readingTime(body: string): number {
+  return Math.max(1, Math.round(body.split(/\s+/).filter(Boolean).length / 220));
+}
+
+const postSummaries = posts.map((post) => ({
+  ...post,
+  excerpt: excerpt(post.body, post.data.description),
+  readingTime: readingTime(post.body),
+}));
+
+// Structured data — Blog + list of BlogPosting for machine readers (search + LLM crawlers).
+const blogSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Blog',
+  name: 'Attestto Blog',
+  description: 'Engineering notes, standards updates, and product thinking on digital identity infrastructure.',
+  url: 'https://attestto.com/blog/',
+  publisher: {
+    '@type': 'Organization',
+    name: 'Attestto',
+    url: 'https://attestto.com',
+  },
+  inLanguage: 'en-US',
+  blogPost: postSummaries.map((post) => ({
+    '@type': 'BlogPosting',
+    headline: post.data.title,
+    description: post.data.description,
+    url: `https://attestto.com/blog/${post.slug}/`,
+    datePublished: post.data.publishDate.toISOString(),
+    dateModified: post.data.publishDate.toISOString(),
+    author: {
+      '@type': 'Organization',
+      name: post.data.author,
+    },
+    keywords: post.data.tags.join(', '),
+    inLanguage: post.data.lang === 'es' ? 'es-CR' : 'en-US',
+  })),
+};
+
+// ItemList — sometimes preferred by AI crawlers as an ordered index of the blog.
+const itemListSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Attestto Blog Posts',
+  numberOfItems: postSummaries.length,
+  itemListElement: postSummaries.map((post, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    url: `https://attestto.com/blog/${post.slug}/`,
+    name: post.data.title,
+  })),
+};
+---
+<BaseLayout
+  title="Blog"
+  description="Attestto blog. Engineering notes, standards updates, and product thinking on digital identity infrastructure."
+  lang="en"
+  jsonLd={[blogSchema, itemListSchema]}
+>
+  <Section variant="light">
+    <SectionHead
+      label="Blog"
+      title="Notes from the build"
+      desc="Engineering notes, standards updates, and product thinking on digital identity infrastructure. Every post cites the specifications and standards it is grounded in."
+    />
+
+    {postSummaries.length === 0 ? (
+      <p class="muted">No posts published yet.</p>
+    ) : (
+      <ol class="post-list" role="list">
+        {postSummaries.map((post) => (
+          <li>
+            <article class="post-row">
+              <div class="post-meta">
+                <time datetime={post.data.publishDate.toISOString()}>
+                  {new Intl.DateTimeFormat('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  }).format(post.data.publishDate)}
+                </time>
+                <span aria-hidden="true">·</span>
+                <span>{post.readingTime} min read</span>
+              </div>
+
+              <h2 class="post-title">
+                <a href={`/blog/${post.slug}/`}>{post.data.title}</a>
+              </h2>
+
+              <p class="post-excerpt">{post.excerpt}</p>
+
+              <div class="post-footer">
+                <ul class="post-tags" aria-label="Tags">
+                  {post.data.tags.slice(0, 4).map((tag) => (
+                    <li>{tag}</li>
+                  ))}
+                </ul>
+                <a href={`/blog/${post.slug}/`} class="post-read-more" aria-label={`Read post: ${post.data.title}`}>
+                  Read post →
+                </a>
+              </div>
+            </article>
+          </li>
+        ))}
+      </ol>
+    )}
+  </Section>
+</BaseLayout>
+
+<style>
+  .post-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .post-row {
+    padding-block: var(--space-lg);
+    border-block-end: 1px solid var(--border-subtle);
+  }
+
+  .post-list li:first-child .post-row {
+    padding-block-start: 0;
+  }
+
+  .post-list li:last-child .post-row {
+    border-block-end: none;
+  }
+
+  .post-meta {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs-size);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-block-end: var(--space-xs);
+  }
+
+  .post-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-block-end: var(--space-sm);
+    color: var(--text-primary);
+  }
+
+  .post-title a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  .post-title a:hover {
+    color: var(--color-accent);
+  }
+
+  .post-excerpt {
+    font-family: var(--font-serif);
+    color: var(--text-secondary);
+    font-size: var(--text-body-serif-size);
+    line-height: 1.55;
+    max-width: 55rem;
+    margin-block-end: var(--space-md);
+  }
+
+  .post-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+
+  .post-tags {
+    display: flex;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-wrap: wrap;
+  }
+
+  .post-tags li {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-accent);
+    padding: 0.25rem 0.6rem;
+    background: var(--color-accent-light);
+    border-radius: var(--radius-pill);
+  }
+
+  .post-read-more {
+    color: var(--color-accent);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: var(--text-small-size);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .post-read-more:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 640px) {
+    .post-row {
+      padding-block: var(--space-md);
+    }
+  }
+</style>

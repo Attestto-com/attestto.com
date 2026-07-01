@@ -1,0 +1,43 @@
+---
+/**
+ * <LEIBadge> — GLEIF-compatible LEI display in monospace.
+ * Currently we're between Attestto Inc.'s LEI issuance and the old EEZZEER
+ * predecessor's dissolution, so this badge shows GLEIF compatibility rather
+ * than a specific number.
+ *
+ * When Attestto Inc.'s LEI is issued, update the leiNumber prop to display it.
+ */
+interface Props {
+  leiNumber?: string;
+  leiUrl?: string;
+}
+
+const { leiNumber, leiUrl } = Astro.props;
+---
+<span class="lei-badge">
+  {leiNumber && leiUrl ? (
+    <>
+      GLEIF-registered · LEI <a href={leiUrl} rel="noopener" target="_blank">{leiNumber}</a>
+    </>
+  ) : (
+    <>GLEIF-compatible · Attestto Inc. LEI pending issuance</>
+  )}
+</span>
+
+<style>
+  .lei-badge {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs-size);
+    color: var(--text-on-dark-subtle);
+  }
+
+  .lei-badge a {
+    color: var(--text-on-dark-subtle);
+    text-decoration: none;
+  }
+
+  .lei-badge a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+  }
+</style>

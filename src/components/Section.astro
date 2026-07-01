@@ -1,0 +1,49 @@
+---
+/**
+ * <Section> — alternating light/dark section wrapper.
+ * Ports the OLD site's `.section-light` + `.section-dark` pattern.
+ */
+interface Props {
+  variant?: 'light' | 'dark' | 'plain';
+  id?: string;
+  className?: string;
+}
+
+const { variant = 'plain', id, className = '' } = Astro.props;
+---
+<section
+  id={id}
+  class:list={['section-band', `section-${variant}`, className]}
+  data-section-theme={variant === 'dark' ? 'dark' : 'light'}
+>
+  <div class="container">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .section-band {
+    padding-block: var(--space-xl);
+  }
+
+  .section-light {
+    background: var(--surface-alt);
+    color: var(--text-primary);
+  }
+
+  .section-dark {
+    background: var(--surface-dark);
+    color: var(--text-on-dark);
+  }
+
+  .section-plain {
+    background: var(--surface-page);
+    color: var(--text-primary);
+  }
+
+  @media (max-width: 768px) {
+    .section-band {
+      padding-block: var(--space-lg);
+    }
+  }
+</style>

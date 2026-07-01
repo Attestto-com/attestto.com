@@ -1,0 +1,134 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Grid from '../components/Grid.astro';
+import Card from '../components/Card.astro';
+import Button from '../components/Button.astro';
+---
+<BaseLayout
+  title="Empresa"
+  description="Attestto Inc. Delaware C-Corporation building digital identity infrastructure on open standards. Founded in Costa Rica, focused on Latin America."
+  lang="en"
+>
+  <!-- Hero (dark) -->
+  <section class="hero">
+    <div class="container">
+      <p class="eyebrow">About us</p>
+      <h1>Attestto Inc.</h1>
+      <p class="lead">
+        We build digital identity infrastructure on open standards from W3C, NIST, ISO, and IETF.
+        Founded in Costa Rica, focused on Latin America, incorporated in Delaware.
+      </p>
+      <div class="hero-actions">
+        <Button variant="primary" href="mailto:hello@attestto.com">Contact</Button>
+        <Button variant="secondary" href="/roadmap">See the roadmap →</Button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Three columns (light): Mission + Standards + Legal -->
+  <Section variant="light">
+    <SectionHead
+      label="Who we are"
+      title="Standards-first, citizen-owned"
+      desc="Attestto exists because identity infrastructure should be a public good, not a rent-extraction opportunity. The technical bar is high because the stakes are high."
+    />
+    <Grid cols={3}>
+      <Card>
+        <h3>Mission</h3>
+        <p>
+          Identity is a citizen right. Verification, signing, anchoring, and recovery are free forever.
+          Commerce pays. That distinction is hard-coded in how the platform is built.
+        </p>
+      </Card>
+      <Card>
+        <h3>Standards we author</h3>
+        <p>
+          Every specification is public and vendor-neutral.
+        </p>
+        <ul>
+          <li><a href="https://spec.attestto.com/did-pki"><code>did:pki</code></a>: DID method for CA-hierarchy trust anchors</li>
+          <li><a href="https://spec.attestto.com/did-sns"><code>did:sns</code></a>: DID method for Solana Name Service bindings</li>
+          <li><a href="https://spec.attestto.com/ieal"><code>IEAL</code></a>: Identity Evidence Assurance Level</li>
+        </ul>
+      </Card>
+      <Card>
+        <h3>Legal</h3>
+        <p>
+          <strong>Entity:</strong> Attestto Inc., a Delaware C-Corporation<br />
+          <strong>EIN:</strong> <code>35-2958547</code><br />
+          <strong>LEI:</strong> GLEIF-compatible, LEI pending issuance<br />
+          <strong>Contact:</strong> <a href="mailto:hello@attestto.com">hello@attestto.com</a>
+        </p>
+      </Card>
+    </Grid>
+  </Section>
+
+  <!-- Ecosystem CTA (dark) -->
+  <Section variant="dark">
+    <SectionHead
+      label="Ecosystem"
+      title="Where we participate"
+      desc="Standards work is not a marketing tactic; it is how the identity infrastructure category matures. Below are the venues where we are active or plan to be."
+    />
+    <Grid cols={2}>
+      <Card>
+        <h3>W3C Credentials Community Group</h3>
+        <p>Active engagement on did:pki registry, did:sns discussion, and IEAL peer review.</p>
+      </Card>
+      <Card>
+        <h3>Decentralized Identity Foundation (DIF)</h3>
+        <p>HAVID alignment via peer discussion. IEAL scope introduced as a compositional identity assurance model.</p>
+      </Card>
+      <Card>
+        <h3>GLEIF vLEI Framework</h3>
+        <p>vLEI Solana Bridge deployed as an on-chain implementation of the GLEIF vLEI Framework.</p>
+      </Card>
+      <Card>
+        <h3>NIST SP 800-63-4</h3>
+        <p>Informative crosswalk published. Future revision comment window is the engagement target.</p>
+      </Card>
+    </Grid>
+  </Section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: var(--space-xl) var(--space-lg);
+    background: var(--color-dark);
+    color: #ffffff;
+  }
+
+  .hero .eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs-size);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-dark-sky);
+    margin-block-end: var(--space-sm);
+  }
+
+  .hero h1 {
+    font-size: var(--text-hero-size);
+    font-weight: 800;
+    line-height: var(--text-hero-line);
+    letter-spacing: -0.03em;
+    color: #ffffff;
+  }
+
+  .hero .lead {
+    font-size: var(--text-body-lg-size);
+    color: var(--text-on-dark-muted);
+    max-width: 45rem;
+    margin-block-start: var(--space-md);
+    line-height: var(--text-body-lg-line);
+  }
+
+  .hero-actions {
+    margin-block-start: var(--space-md);
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+</style>

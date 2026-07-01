@@ -1,0 +1,132 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Grid from '../components/Grid.astro';
+import Card from '../components/Card.astro';
+import Button from '../components/Button.astro';
+---
+<BaseLayout
+  title="Personas"
+  description="Tu identidad digital, en tu bolsillo. Guarda documentos en tu Bóveda, decide qué compartir cada vez, y recupera tu identidad si pierdes el teléfono."
+  lang="es"
+>
+  <!-- Hero (dark) -->
+  <section class="hero">
+    <div class="container">
+      <p class="eyebrow">Para personas</p>
+      <h1>Tu identidad digital, en tu bolsillo.</h1>
+      <p class="lead">
+        Guarda tus documentos, firma cuando necesites, y decide qué compartir. Sin criptomonedas,
+        sin billeteras, sin palabras raras. Nunca.
+      </p>
+      <div class="hero-actions">
+        <Button variant="primary" href="https://app.attestto.com" external>Crear mi Digital ID</Button>
+        <Button variant="secondary" href="#como-funciona">Cómo funciona</Button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benefits (light) -->
+  <Section variant="light" id="como-funciona">
+    <SectionHead
+      label="Cómo funciona"
+      title="Tu identidad, bajo tu control"
+      desc="Documentos en un lugar seguro, consentimiento cada vez, recuperación si perdés el teléfono, y compatibilidad con la Firma Digital nacional."
+    />
+    <Grid cols={2}>
+      <Card>
+        <h3>Tus documentos en tu Bóveda</h3>
+        <p>Todo en un lugar seguro en tu dispositivo. Solo vos entrás.</p>
+      </Card>
+      <Card>
+        <h3>Consentimiento por evento</h3>
+        <p>Vos decidís qué compartir, cada vez. Sin permisos permanentes.</p>
+      </Card>
+      <Card>
+        <h3>Recupera si perdés el teléfono</h3>
+        <p>Tu identidad no se pierde con el aparato. Configuramos tu red de recuperación al empezar.</p>
+      </Card>
+      <Card>
+        <h3>Funciona con Firma Digital de CR</h3>
+        <p>Compatible con el sistema nacional de firma digital. Legalmente reconocido bajo Ley 8454.</p>
+      </Card>
+    </Grid>
+  </Section>
+
+  <!-- Closing CTA (dark) -->
+  <Section variant="dark">
+    <div class="closing-cta">
+      <h2>Gratis, seguro, y siempre tuyo.</h2>
+      <p>
+        Un Digital ID que respeta a la persona detrás de la pantalla. Sin publicidad, sin venta de
+        datos, sin intermediarios entre vos y tus documentos.
+      </p>
+      <Button variant="primary" href="https://app.attestto.com" external>Empezar ahora</Button>
+    </div>
+  </Section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: var(--space-xl) var(--space-lg);
+    background: var(--color-dark);
+    color: #ffffff;
+  }
+
+  .hero .eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs-size);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-dark-sky);
+    margin-block-end: var(--space-sm);
+  }
+
+  .hero h1 {
+    font-size: var(--text-hero-size);
+    font-weight: 800;
+    line-height: var(--text-hero-line);
+    letter-spacing: -0.03em;
+    color: #ffffff;
+    max-width: 40rem;
+  }
+
+  .hero .lead {
+    font-size: var(--text-body-lg-size);
+    color: var(--text-on-dark-muted);
+    max-width: 40rem;
+    margin-block-start: var(--space-md);
+    line-height: var(--text-body-lg-line);
+  }
+
+  .hero-actions {
+    margin-block-start: var(--space-md);
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+
+  .closing-cta {
+    text-align: center;
+    max-width: 40rem;
+    margin: 0 auto;
+  }
+
+  .closing-cta h2 {
+    font-family: var(--font-sans);
+    font-size: var(--text-h1-size);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+    margin-block-end: var(--space-sm);
+  }
+
+  .closing-cta p {
+    font-size: var(--text-body-lg-size);
+    color: var(--text-on-dark-muted);
+    line-height: var(--text-body-lg-line);
+    margin-block-end: var(--space-md);
+  }
+</style>

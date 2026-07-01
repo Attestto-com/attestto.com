@@ -1,0 +1,52 @@
+# Attestto public site — robots policy
+# See also: /llms.txt for curated LLM-oriented content discovery
+# All bots welcome. Attestto content is intentionally open standards-track material.
+
+User-agent: *
+Allow: /
+
+# AI answer engines and training crawlers explicitly welcome
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Sitemap
+Sitemap: https://attestto.com/sitemap-index.xml

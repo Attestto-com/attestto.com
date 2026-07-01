@@ -1,0 +1,198 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Grid from '../components/Grid.astro';
+import Card from '../components/Card.astro';
+import Button from '../components/Button.astro';
+import RepoPill from '../components/RepoPill.astro';
+
+const iealLevels = ['L0', 'L1', 'L2', 'L3', 'L4', 'L5', 'L6'];
+---
+<BaseLayout
+  title="Firma Digital"
+  description="Measurable identity assurance, per operation. IEAL classification maps capture, algorithm, and storage to a composite assurance level. Vendor-neutral, standards-first, aligned with NIST SP 800-63-4."
+  lang="en"
+  darkHero={true}
+>
+  <!-- Hero (dark) -->
+  <section class="hero">
+    <div class="container">
+      <p class="eyebrow">NIST SP 800-63-4 · Aligned identity assurance</p>
+      <h1>Measurable identity assurance, per operation.</h1>
+      <p class="lead">
+        IEAL classification maps capture, algorithm, and storage to a composite assurance level.
+        Vendor-neutral, standards-first, publicly specified.
+      </p>
+      <div class="hero-actions">
+        <Button variant="primary" href="mailto:hello@attestto.com">Request technical brief</Button>
+        <Button variant="secondary" href="https://spec.attestto.com/ieal" external>Read the spec ↗</Button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Three axes (light) -->
+  <Section variant="light" id="axes">
+    <SectionHead
+      label="Three axes of assurance"
+      title="Composable. Independent. Machine-verifiable."
+      desc="Each axis scored independently, then composed into a single IEAL level a verifier can procure against. Full spec at spec.attestto.com/ieal."
+    />
+    <Grid cols={3}>
+      <Card>
+        <h3>Capture</h3>
+        <p>Cryptographic attestation of the capture environment. Play Integrity, App Attest, hardware-bound keys. C0 (untrusted) through C2 (hardware-attested).</p>
+      </Card>
+      <Card>
+        <h3>Algorithm</h3>
+        <p>Presentation Attack Detection strength. Aligned with ISO/IEC 30107-3 and NIST 800-63A §3.13 (ProofBios). A0 through A4 (PAD L2 certified).</p>
+      </Card>
+      <Card>
+        <h3>Storage</h3>
+        <p>Where the subscriber-controlled witness resides. TPM, TEE, Secure Enclave, external hardware token. S0 through S4 (multi-party threshold recovery).</p>
+      </Card>
+    </Grid>
+  </Section>
+
+  <!-- Composite IEAL ladder (dark) -->
+  <Section variant="dark" id="ladder">
+    <SectionHead
+      label="Composite IEAL"
+      title="L0 to L6"
+      desc="A composite is only as strong as its weakest axis. The blue ramp indicates assurance intensity; it is a specification figure, not a CTA."
+    />
+    <div class="ieal-scale" role="list" aria-label="IEAL composite levels L0 through L6">
+      {iealLevels.map((level, i) => (
+        <div class="ieal-level" role="listitem" style={`--intensity: ${i / 6};`}>
+          <span class="level-code">{level}</span>
+        </div>
+      ))}
+    </div>
+    <p class="ieal-note">
+      L4 approximates NIST IAL2 with the Biometric verification pathway satisfied. L6 satisfies a
+      subset of NIST IAL3 controls (excluding on-site attended proofing). See the NIST crosswalk
+      for the detailed mapping.
+    </p>
+  </Section>
+
+  <!-- Adaptive + Vendor-neutral (light) -->
+  <Section variant="light">
+    <SectionHead
+      label="Deployment"
+      title="Adaptive, vendor-neutral"
+      desc="Step up assurance only when the operation warrants it. Integrate any iBeta-certified PAD provider. No shadow vendor list."
+    />
+    <Grid cols={2}>
+      <Card>
+        <h3>Adaptive per-operation assurance</h3>
+        <p>Step up to a higher IEAL only when the operation warrants it. A password reset is not a wire transfer. A view is not a signature.</p>
+        <p class="callout">
+          <strong>Info.</strong> Assurance is requested per operation, not per session.
+        </p>
+        <RepoPill href="https://spec.attestto.com/ieal/crosswalks/nist-800-63" label="NIST 800-63-4 crosswalk" type="spec" />
+      </Card>
+      <Card>
+        <h3>Vendor-neutral integration</h3>
+        <p>Bring any iBeta-certified PAD provider. Attestto does not maintain a shadow vendor list. The public iBeta register is the authority. Vendor-neutrality is codified as §11 of the IEAL specification, and the SDK adapter pattern is open source.</p>
+        <div class="card-pills">
+          <RepoPill href="https://spec.attestto.com/ieal" label="spec.attestto.com/ieal" type="spec" />
+          <RepoPill href="https://github.com/Attestto-com/vc-sdk" label="Attestto-com/vc-sdk" type="github" />
+        </div>
+      </Card>
+    </Grid>
+  </Section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: var(--space-xl) var(--space-lg);
+    background: var(--color-dark);
+    color: #ffffff;
+  }
+
+  .hero .eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs-size);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-dark-sky);
+    margin-block-end: var(--space-sm);
+  }
+
+  .hero h1 {
+    font-size: var(--text-hero-size);
+    font-weight: 800;
+    line-height: var(--text-hero-line);
+    letter-spacing: -0.03em;
+    color: #ffffff;
+    max-width: 42rem;
+  }
+
+  .hero .lead {
+    font-size: var(--text-body-lg-size);
+    color: var(--text-on-dark-muted);
+    max-width: 45rem;
+    margin-block-start: var(--space-md);
+    line-height: var(--text-body-lg-line);
+  }
+
+  .hero-actions {
+    margin-block-start: var(--space-md);
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+
+  .ieal-scale {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: var(--space-2);
+    margin-block-start: var(--space-md);
+  }
+
+  .ieal-level {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    background: color-mix(in oklab, var(--color-dark-sky), transparent calc(90% - var(--intensity) * 55%));
+    color: color-mix(in oklab, white, var(--color-brand-navy) calc(60% - var(--intensity) * 60%));
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: var(--text-body-size);
+  }
+
+  :global(.section-dark) .ieal-note {
+    color: var(--text-on-dark-muted);
+    max-width: 42rem;
+    margin-block-start: var(--space-md);
+    font-size: var(--text-small-size);
+    line-height: 1.6;
+  }
+
+  .callout {
+    display: block;
+    margin-block-start: var(--space-sm);
+    padding: var(--space-sm);
+    background: var(--color-info-bg);
+    border: 1px solid var(--color-info-border);
+    border-radius: var(--radius-md);
+    font-size: var(--text-small-size);
+    color: var(--text-primary);
+  }
+
+  .card-pills {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+    margin-block-start: auto;
+    padding-block-start: var(--space-sm);
+  }
+
+  @media (max-width: 640px) {
+    .ieal-scale {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>

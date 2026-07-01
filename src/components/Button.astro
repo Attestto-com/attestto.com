@@ -1,0 +1,89 @@
+---
+/**
+ * <Button variant="primary|secondary" href="..."> — link-styled button.
+ * Auto-adjusts colors for section-dark and hero contexts.
+ */
+interface Props {
+  variant?: 'primary' | 'secondary';
+  href: string;
+  external?: boolean;
+  className?: string;
+}
+
+const { variant = 'primary', href, external = false, className = '' } = Astro.props;
+
+const rel = external ? 'noopener' : undefined;
+const target = external ? '_blank' : undefined;
+---
+<a
+  href={href}
+  rel={rel}
+  target={target}
+  class:list={['btn', `btn-${variant}`, className]}
+>
+  <slot />
+</a>
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-md);
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: var(--text-small-size);
+    line-height: 1;
+    transition: all 0.15s ease;
+    border: 1px solid transparent;
+    text-decoration: none;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .btn:hover {
+    text-decoration: none;
+  }
+
+  /* Primary — light context */
+  .btn-primary {
+    background: var(--cta-primary-bg);
+    color: var(--cta-primary-text);
+  }
+  .btn-primary:hover {
+    background: var(--cta-primary-hover-bg);
+  }
+
+  /* Secondary — light context */
+  .btn-secondary {
+    background: var(--cta-secondary-bg);
+    color: var(--cta-secondary-text);
+    border-color: var(--cta-secondary-border);
+  }
+  .btn-secondary:hover {
+    background: var(--surface-alt);
+  }
+
+  /* Overrides on dark backgrounds (hero + section-dark) */
+  :global(.hero) .btn-primary,
+  :global(.section-dark) .btn-primary {
+    background: var(--cta-primary-dark-bg);
+    color: var(--cta-primary-dark-text);
+  }
+  :global(.hero) .btn-primary:hover,
+  :global(.section-dark) .btn-primary:hover {
+    background: var(--cta-primary-dark-hover-bg);
+  }
+
+  :global(.hero) .btn-secondary,
+  :global(.section-dark) .btn-secondary {
+    color: var(--cta-secondary-dark-text);
+    border-color: var(--cta-secondary-dark-border);
+  }
+  :global(.hero) .btn-secondary:hover,
+  :global(.section-dark) .btn-secondary:hover {
+    background: var(--cta-secondary-dark-hover-bg);
+    color: #ffffff;
+  }
+</style>

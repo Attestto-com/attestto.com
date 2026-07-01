@@ -1,0 +1,105 @@
+---
+/**
+ * <ShipStatus> — honest ship-status badge. Replaces OLD site's `.badge-soon`.
+ * Every product/feature card should carry one so readers know current state.
+ *
+ * status:
+ *   - shipped:      green,  usable today
+ *   - in-progress:  amber,  active build
+ *   - planned:      blue,   scheduled roadmap item
+ *   - research:     purple, exploratory, no commitment
+ *
+ * The badge is a link to the /roadmap page (specifically to the section that
+ * defines the status), with a title attribute for hover tooltip explanation.
+ */
+interface Props {
+  status: 'shipped' | 'in-progress' | 'planned' | 'research';
+  label?: string;
+}
+
+const { status, label } = Astro.props;
+
+const defaults: Record<Props['status'], string> = {
+  shipped: 'Shipped',
+  'in-progress': 'In progress',
+  planned: 'Planned',
+  research: 'Research',
+};
+
+const tooltips: Record<Props['status'], string> = {
+  shipped: 'Shipped: publicly usable today. Public repo, deployment, or specification available.',
+  'in-progress': 'In progress: under active construction. Timelines are best-effort. Not shippable in production yet.',
+  planned: 'Planned: committed subject to customer or grant trigger. Not under active construction.',
+  research: 'Research: exploratory. No build commitment. Included for transparency about long-horizon direction.',
+};
+
+const anchors: Record<Props['status'], string> = {
+  shipped: '/roadmap#shipped',
+  'in-progress': '/roadmap#in-progress',
+  planned: '/roadmap#planned',
+  research: '/roadmap#research',
+};
+
+const text = label ?? defaults[status];
+const tooltip = tooltips[status];
+const href = anchors[status];
+---
+<a href={href} class:list={['ship-status', `status-${status}`]} title={tooltip} aria-label={tooltip}>{text}</a>
+
+<style>
+  .ship-status {
+    display: inline-block;
+    padding: 0.125rem 0.5rem;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    vertical-align: middle;
+    line-height: 1.4;
+    text-decoration: none;
+    transition: filter 0.15s;
+  }
+
+  .ship-status:hover {
+    filter: brightness(1.15);
+    text-decoration: none;
+  }
+
+  .status-shipped {
+    background: #ecfdf5;
+    color: var(--color-verified-700);
+  }
+  :global(.section-dark) .status-shipped {
+    background: rgba(64, 221, 117, 0.15);
+    color: var(--color-verified-400);
+  }
+
+  .status-in-progress {
+    background: var(--color-warning-bg);
+    color: #92400e;
+  }
+  :global(.section-dark) .status-in-progress {
+    background: rgba(251, 191, 36, 0.15);
+    color: #fbbf24;
+  }
+
+  .status-planned {
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+  }
+  :global(.section-dark) .status-planned {
+    background: var(--color-dark-sky-bg);
+    color: var(--color-dark-sky);
+  }
+
+  .status-research {
+    background: #f5f3ff;
+    color: #6d28d9;
+  }
+  :global(.section-dark) .status-research {
+    background: rgba(196, 181, 253, 0.15);
+    color: #c4b5fd;
+  }
+</style>

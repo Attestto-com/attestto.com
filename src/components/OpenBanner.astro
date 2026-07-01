@@ -1,0 +1,77 @@
+---
+/**
+ * <OpenBanner> — full-width promotional band inside a section-dark.
+ * Ports OLD `.open-banner` pattern. Typical use: link to attestto.org (Open).
+ */
+interface Props {
+  title: string;
+  desc: string;
+  ctaHref: string;
+  ctaLabel: string;
+  external?: boolean;
+}
+
+const { title, desc, ctaHref, ctaLabel, external = false } = Astro.props;
+const rel = external || ctaHref.startsWith('http') ? 'noopener' : undefined;
+const target = external || ctaHref.startsWith('http') ? '_blank' : undefined;
+---
+<div class="open-banner">
+  <div class="open-banner-text">
+    <h3>{title}</h3>
+    <p>{desc}</p>
+  </div>
+  <a href={ctaHref} rel={rel} target={target} class="btn btn-secondary open-banner-cta">{ctaLabel}</a>
+</div>
+
+<style>
+  .open-banner {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--color-dark-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+
+  .open-banner-text h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-block-end: 0.25rem;
+    color: #ffffff;
+  }
+
+  .open-banner-text p {
+    color: var(--text-on-dark-muted);
+    font-size: var(--text-small-size);
+    margin: 0;
+  }
+
+  .open-banner-cta {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: var(--text-small-size);
+    color: var(--cta-secondary-dark-text);
+    border: 1px solid var(--cta-secondary-dark-border);
+    text-decoration: none;
+    background: transparent;
+  }
+
+  .open-banner-cta:hover {
+    background: var(--cta-secondary-dark-hover-bg);
+    color: #ffffff;
+    text-decoration: none;
+  }
+
+  @media (max-width: 640px) {
+    .open-banner {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+</style>

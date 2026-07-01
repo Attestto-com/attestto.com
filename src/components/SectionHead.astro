@@ -1,0 +1,66 @@
+---
+/**
+ * <SectionHead> — combines the OLD site's `.section-label` + `.section-title` +
+ * `.section-desc` typography scale into one component. Auto-adjusts colors when
+ * placed inside a <Section variant="dark">.
+ */
+interface Props {
+  label?: string;
+  title: string;
+  desc?: string;
+  id?: string;
+}
+
+const { label, title, desc, id } = Astro.props;
+---
+<div class="section-head">
+  {label && <p class="section-label">{label}</p>}
+  <h2 class="section-title" id={id}>{title}</h2>
+  {desc && <p class="section-desc">{desc}</p>}
+</div>
+
+<style>
+  .section-head {
+    margin-block-end: var(--space-md);
+  }
+
+  .section-label {
+    font-size: var(--text-xs-size);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-accent);
+    margin-block-end: var(--space-xs);
+  }
+
+  .section-title {
+    font-size: var(--text-h2-size);
+    line-height: var(--text-h2-line);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    margin-block-end: var(--space-sm);
+    max-width: 42rem;
+  }
+
+  .section-desc {
+    color: var(--text-secondary);
+    max-width: 42rem;
+    font-size: var(--text-body-size);
+    line-height: var(--text-body-line);
+    margin-block-end: var(--space-lg);
+  }
+
+  /* Dark section overrides */
+  :global(.section-dark) .section-label {
+    color: var(--color-dark-sky);
+  }
+
+  :global(.section-dark) .section-title {
+    color: #ffffff;
+  }
+
+  :global(.section-dark) .section-desc {
+    color: var(--text-on-dark-muted);
+  }
+</style>

@@ -1,0 +1,43 @@
+# Attestto
+
+> Digital identity infrastructure built on open standards from W3C, NIST, ISO, and IETF. Costa Rica origin, LATAM focus. Legal entity: Attestto Inc., a Delaware C-Corporation.
+
+Attestto ships open standards, reference implementations, and citizen software for verifiable digital identity. Our specifications are vendor-neutral and licensed under Creative Commons Attribution 4.0. Our reference code is licensed under Apache License 2.0.
+
+## Specifications
+
+- [IEAL — Identity Evidence Assurance Level](https://spec.attestto.com/ieal): Three-axis compositional model (Capture, Algorithm, Storage) for classifying identity evidence assurance, composite levels L0 through L6. Fits inside the NIST SP 800-63-4 Subscriber-Controlled Wallet model.
+- [did:pki — DID Method for CA Hierarchies](https://spec.attestto.com/did-pki): W3C DID method that assigns globally resolvable DIDs to Certificate Authorities within national PKI hierarchies.
+- [did:sns — DID Method for Solana Name Service](https://spec.attestto.com/did-sns): W3C DID method anchored to Solana Name Service domains.
+
+## Crosswalks
+
+- [IEAL to NIST SP 800-63-4](https://spec.attestto.com/ieal/crosswalks/nist-800-63): Informative mapping of IEAL axes and composite levels to NIST 800-63A Identity Proofing, 800-63B Authentication, and 800-63C Federation controls. Not endorsed by NIST.
+
+## Marketing pages
+
+- [Home](https://attestto.com/): Identity you can verify, trust you can prove.
+- [Personas (citizen-facing)](https://attestto.com/personas): Digital identity for citizens, Spanish-primary, plain language.
+- [Firma Digital (regulated buyers)](https://attestto.com/firma-digital): NIST 800-63-4-aligned identity assurance for regulated organizations.
+- [Empresa (about)](https://attestto.com/empresa): Company information, standards published, legal entity details.
+
+## Blog
+
+- [Identity evidence: honest engineering](https://attestto.com/blog/identity-evidence-honest-engineering): Introduction to IEAL, why it fits inside NIST SP 800-63-4, and what Attestto does and does not claim about presentation attack detection certification.
+
+## Software
+
+- [attestto-desktop](https://github.com/Attestto-com/attestto-desktop): Open-source citizen application (Electron + Vue). Reference implementation of IEAL Storage axis S1 through S4.
+- [attestto-mobile](https://github.com/Attestto-com/attestto-mobile): Mobile companion supplying Capture axis C1 and C2 attestations via Play Integrity API on Android and App Attest on iOS.
+- [attestto-app](https://github.com/Attestto-com/attestto-app): Progressive web application at app.attestto.com.
+- [id-wallet-adapter](https://github.com/Attestto-com/id-wallet-adapter): Universal wallet adapter for credential wallet browser extensions.
+- [vc-sdk](https://github.com/Attestto-com/vc-sdk): W3C Verifiable Credentials SDK.
+
+## Standards positioning
+
+Attestto authors specifications intended for adoption by anyone. We do not require adopters to use our software or infrastructure. Our specifications are chain-optional at the identity layer via did:pki and did:webvh. Vendor-neutrality is a core commitment: any provider meeting the criteria of a given specification axis may satisfy the requirement.
+
+## Contact
+
+- General: hello@attestto.com
+- GitHub organization: https://github.com/Attestto-com

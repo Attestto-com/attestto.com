@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout
+  title="404"
+  description="Page not found. The page you were looking for does not exist on attestto.com. Return to the home page or explore the Attestto blog and specifications."
+  lang="en"
+>
+  <section class="hero">
+    <div class="container">
+      <p class="eyebrow">404</p>
+      <h1>Page not found.</h1>
+      <p class="hero-lead">
+        The page you were looking for does not exist here. It may have moved, or it was never here.
+      </p>
+      <div class="hero-ctas">
+        <a href="/" class="btn btn-primary">Go home</a>
+        <a href="/blog" class="btn btn-secondary">Read the blog</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: var(--space-24);
+    text-align: center;
+  }
+
+  .hero .eyebrow {
+    margin-block-end: var(--space-4);
+  }
+
+  .hero h1 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: var(--text-display-size);
+    line-height: var(--text-display-line);
+    letter-spacing: -0.02em;
+  }
+
+  .hero-lead {
+    max-width: 60ch;
+    margin: var(--space-6) auto 0;
+    font-size: var(--text-h4-size);
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: var(--space-3);
+    margin-block-start: var(--space-8);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 20px;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid transparent;
+  }
+
+  .btn-primary {
+    background: var(--cta-primary-bg);
+    color: var(--cta-primary-text);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--cta-secondary-text);
+    border-color: var(--cta-secondary-border);
+  }
+</style>
