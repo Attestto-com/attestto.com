@@ -3,22 +3,16 @@
  * <Header> — sticky dark navigation. Ports the OLD site's nav pattern:
  * dark navy background, subtle transparency + blur, white brand, muted links.
  */
+import DigitalIdCta from './DigitalIdCta.astro';
+import { primaryNav } from '../config/site';
+
 interface Props {
   lang?: 'en' | 'es';
 }
 
 const { lang = 'en' } = Astro.props;
 
-const nav = [
-  { href: '/personas', label: 'Personas' },
-  { href: '/firma-digital', label: 'Firma Digital' },
-  { href: '/blog', label: 'Blog' },
-  { href: '/roadmap', label: 'Roadmap' },
-  { href: '/empresa', label: 'Empresa' },
-];
-
-const ctaLabel = lang === 'es' ? 'Crear mi Digital ID' : 'Create your Digital ID';
-const ctaHref = 'https://app.attestto.com';
+const nav = primaryNav(lang);
 const current = Astro.url.pathname.replace(/\/$/, '') || '/';
 ---
 <header class="site-header">
@@ -43,7 +37,7 @@ const current = Astro.url.pathname.replace(/\/$/, '') || '/';
     </nav>
 
     <div class="header-actions">
-      <a href={ctaHref} class="cta-button">{ctaLabel}</a>
+      <DigitalIdCta lang={lang} variant="header" />
       <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false" data-menu-toggle>
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
           <path d="M3 6h14M3 10h14M3 14h14" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
@@ -58,7 +52,7 @@ const current = Astro.url.pathname.replace(/\/$/, '') || '/';
         {nav.map((item) => (
           <li><a href={item.href}>{item.label}</a></li>
         ))}
-        <li class="mobile-cta"><a href={ctaHref}>{ctaLabel}</a></li>
+        <li class="mobile-cta"><DigitalIdCta lang={lang} variant="mobile" /></li>
       </ul>
     </div>
   </nav>

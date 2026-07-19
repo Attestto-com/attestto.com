@@ -1,0 +1,113 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import Grid from '../../components/Grid.astro';
+import Card from '../../components/Card.astro';
+import Button from '../../components/Button.astro';
+
+const pageTitle = 'Productos';
+const pageDesc =
+  'Productos Attestto: inicio de sesión sin contraseñas con Attestto, firmas digitales con Firma Digital, y tus IDs Digitales con documentos en tu Bóveda.';
+const canonical = 'https://attestto.com/productos/';
+
+const products = [
+  {
+    name: 'Attestto para tu navegador',
+    href: '/productos/extension',
+    desc: 'Protección anti-phishing, inicio de sesión sin contraseñas y tu identidad digital con credenciales verificables, en una sola extensión de navegador.',
+  },
+  {
+    name: 'Iniciar sesión con Attestto',
+    href: '/productos/iniciar-sesion',
+    desc: 'Inicio de sesión sin contraseñas ni usuarios. Una identidad portátil que controlás, privada en cada sitio, que te avisa ante sitios falsos.',
+  },
+  {
+    name: 'Firma Digital',
+    href: '/firma-digital',
+    desc: 'Firmas digitales calificadas y verificación para documentos regulados.',
+  },
+  {
+    name: 'IDs Digitales',
+    href: '/personas',
+    desc: 'Tu cédula, licencia y pasaporte en un solo lugar. Guardá tus documentos de identidad y credenciales en tu Bóveda, y decidí qué compartir cada vez.',
+  },
+];
+
+const itemListLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Productos Attestto',
+  itemListElement: products.map((p, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: p.name,
+    url: `https://attestto.com${p.href}`,
+  })),
+};
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDesc}
+  canonical={canonical}
+  lang="es"
+  darkHero={true}
+  jsonLd={itemListLd}
+>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="container">
+      <p class="eyebrow">Productos</p>
+      <h1 id="hero-title">Identidad, firma y confianza.</h1>
+      <p class="lead">
+        Sobre estándares abiertos, bajo el control de la persona. Elegí un producto para saber más.
+      </p>
+    </div>
+  </section>
+
+  <Section variant="light">
+    <SectionHead label="Explorá" title="Productos Attestto" />
+    <Grid cols={3}>
+      {products.map((p) => (
+        <Card>
+          <h3>{p.name}</h3>
+          <p>{p.desc}</p>
+          <Button variant="secondary" href={p.href}>Saber más</Button>
+        </Card>
+      ))}
+    </Grid>
+  </Section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: var(--space-xl) var(--space-lg);
+    background: var(--color-dark);
+    color: #ffffff;
+  }
+  .container {
+    max-width: var(--max-width, 72rem);
+    margin: 0 auto;
+    padding: 0 var(--space-md);
+  }
+  .eyebrow {
+    font-family: var(--font-mono, 'JetBrains Mono', monospace);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.8125rem;
+    color: var(--color-ink-subtle, #94a3b8);
+    margin: 0 0 var(--space-sm);
+  }
+  .hero h1 {
+    font-size: clamp(2.25rem, 5vw, 3.5rem);
+    line-height: 1.1;
+    margin: 0 0 var(--space-sm);
+  }
+  .lead {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    max-width: 42rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0;
+  }
+</style>

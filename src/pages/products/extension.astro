@@ -1,0 +1,400 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import Grid from '../../components/Grid.astro';
+import Card from '../../components/Card.astro';
+import Button from '../../components/Button.astro';
+import MediaCarousel from '../../components/MediaCarousel.astro';
+import { LINKS } from '../../config/site';
+
+const crumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'Products', href: '/products/' },
+  { name: 'Attestto for your browser', href: '/products/extension/' },
+];
+
+// Screenshot shot list. Drop 1280x800 PNGs into /public/screenshots/ with
+// these names to replace the placeholders (same assets as the store listing).
+const shots = [
+  { src: '/screenshots/extension-trust-bar.png', caption: 'A clear warning when a site is impersonating another.' },
+  { src: '/screenshots/extension-credentials.png', caption: 'Your credentials, held safely on your device.' },
+  { src: '/screenshots/extension-present.png', caption: 'Share only what a site needs, nothing more.' },
+];
+
+const pageTitle = 'Digital ID and phishing protection for your browser';
+const pageDesc =
+  'Know if a website is really who it says it is. Attestto is a browser extension with anti-phishing protection, passwordless sign in, and a digital ID that holds your verifiable credentials, all on your device.';
+const canonical = 'https://attestto.com/products/extension/';
+
+// Chrome Web Store listing. Goes live when the listing publishes.
+const EXTENSION_URL = LINKS.extension;
+const GITHUB_URL = LINKS.github;
+const SIGN_IN_URL = LINKS.signIn;
+const DEMO_URL = '/products/sign-in/';
+const VIDEO_ID = ''; // e.g. 'dQw4w9WgXcQ' — leave empty to show the placeholder frame
+
+const faq = [
+  {
+    q: 'Do I need to create an account?',
+    a: 'No. The anti-phishing protection works the moment you install it, with no account and no setup. A digital identity is optional and lives only on your device.',
+  },
+  {
+    q: 'Is it free?',
+    a: 'Yes. Attestto is free for individuals, forever, for identity, signing, and verification.',
+  },
+  {
+    q: 'What does Attestto see about me?',
+    a: 'Nothing about your browsing. Your identity and credentials are stored on your device and encrypted with your passkey. Attestto never sees or sends the sites you visit.',
+  },
+  {
+    q: 'How is it different from a password manager?',
+    a: 'A password manager stores passwords. Attestto gives you an identity you control, warns you when a site is fake, and holds real credentials you can present, sharing only what a site needs.',
+  },
+  {
+    q: 'Does it work on government sites?',
+    a: 'Yes. On Costa Rican government and official sites, a small trust bar confirms the site is genuine so you can act with confidence.',
+  },
+  {
+    q: 'What if I lose my device?',
+    a: 'You restore everything from your encrypted backup, protected by a password only you know.',
+  },
+  {
+    q: 'Is it open source?',
+    a: 'Yes. The extension and its libraries are open source.',
+  },
+];
+
+const softwareAppLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Attestto',
+  applicationCategory: 'SecurityApplication',
+  operatingSystem: 'Chrome, Brave, Edge',
+  description:
+    'A browser extension that warns you when a website is impersonating another, confirms genuine official sites, lets you sign in without passwords, and holds your verifiable credentials on your own device.',
+  url: canonical,
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Attestto',
+  },
+};
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: item.a },
+  })),
+};
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDesc}
+  canonical={canonical}
+  lang="en"
+  darkHero={true}
+  jsonLd={[softwareAppLd, faqLd]}
+  breadcrumbs={crumbs}
+>
+  <!-- Hero -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="container">
+      <p class="eyebrow">Browser extension</p>
+      <h1 id="hero-title">Know who you are really dealing with online.</h1>
+      <p class="lead">
+        Attestto warns you when a website is pretending to be another, lets you sign in without
+        passwords, and carries your digital ID and documents safely. All from your browser, all on
+        your device.
+      </p>
+      <div class="hero-actions">
+        <Button variant="primary" href={EXTENSION_URL} external>Add to your browser</Button>
+        <Button variant="secondary" href="#features">See what it does</Button>
+      </div>
+      <p class="fineprint">Free for individuals. No account needed. Works on Chrome, Brave, and Edge.</p>
+    </div>
+  </section>
+
+  <!-- Protect -->
+  <Section variant="plain" id="features">
+    <SectionHead
+      label="Protect"
+      title="Protect yourself from fake sites."
+      desc="It works on every site, with no setup and no account. Attestto checks the sites you visit and warns you the moment one is impersonating another."
+    />
+    <Grid cols={3}>
+      <Card>
+        <h3>Spot fake sites</h3>
+        <p>Get warned the moment a site is pretending to be your bank, a store, or a government page.</p>
+      </Card>
+      <Card>
+        <h3>Extra care where it matters</h3>
+        <p>On pages that ask for personal or financial details, Attestto flags anything unsafe before you type.</p>
+      </Card>
+      <Card>
+        <h3>Confirm official sites</h3>
+        <p>On Costa Rican government and official sites, a small bar confirms the site is genuine.</p>
+      </Card>
+    </Grid>
+  </Section>
+
+  <!-- See it in action: carousel with the video first, then screenshots -->
+  <Section variant="light" id="screenshots">
+    <SectionHead label="See it" title="See it in action." />
+    <MediaCarousel
+      videoId={VIDEO_ID}
+      videoTitle="Attestto browser extension demo"
+      videoCaption="Watch the demo."
+      shots={shots}
+      prevLabel="Previous"
+      nextLabel="Next"
+    />
+  </Section>
+
+  <!-- Sign in -->
+  <Section variant="plain" id="sign-in">
+    <SectionHead
+      label="Sign in"
+      title="Sign in without passwords."
+      desc="Log in with an identity protected by your device's passkey, your fingerprint or face. Because your login is tied to the real website, a fake site cannot trick you into signing in."
+    />
+    <Grid cols={2}>
+      <Card>
+        <h3>A different identity on every site</h3>
+        <p>So companies cannot link what you do on one site to another. You are not trackable across the web.</p>
+      </Card>
+      <Card>
+        <h3>You stay in control</h3>
+        <p>See every site where you have an identity, and remove any of them at any time.</p>
+      </Card>
+    </Grid>
+    <div class="section-cta">
+      <Button variant="primary" href={SIGN_IN_URL} external>Try Sign in with Attestto</Button>
+      <Button variant="secondary" href={DEMO_URL}>See the demo</Button>
+    </div>
+  </Section>
+
+  <!-- Wallet -->
+  <Section variant="light" id="wallet">
+    <SectionHead
+      label="Your wallet"
+      title="Carry your ID and credentials."
+      desc="Keep your digital ID and credentials in one safe place on your device: a certificate, a membership, a license, and more."
+    />
+    <Grid cols={2}>
+      <Card>
+        <h3>Share only what is needed</h3>
+        <p>Prove that you hold a license or that you are over 18, without handing over the whole document or extra details.</p>
+      </Card>
+      <Card>
+        <h3>Sign documents</h3>
+        <p>Approve and sign forms and documents securely, tied to your identity.</p>
+      </Card>
+      <Card>
+        <h3>Fill forms faster</h3>
+        <p>Use your saved information to complete Attestto forms without retyping.</p>
+      </Card>
+      <Card>
+        <h3>Your inbox</h3>
+        <p>When a site asks you to prove or share something, it shows up here to review and approve.</p>
+      </Card>
+    </Grid>
+  </Section>
+
+  <!-- Your data -->
+  <Section variant="plain" id="your-data">
+    <SectionHead
+      label="Your data, in your hands"
+      title="Never lose your identity."
+      desc="Everything you hold stays yours, and you can move it with you."
+    />
+    <Grid cols={3}>
+      <Card>
+        <h3>Back it up</h3>
+        <p>Save an encrypted backup, protected by a password only you know.</p>
+      </Card>
+      <Card>
+        <h3>Restore it</h3>
+        <p>Bring your identity and credentials back on a new device from your backup.</p>
+      </Card>
+      <Card>
+        <h3>Import what you have</h3>
+        <p>Add digital credentials issued to you elsewhere, like a course certificate.</p>
+      </Card>
+    </Grid>
+  </Section>
+
+  <!-- Private by design -->
+  <Section variant="dark" id="privacy">
+    <div class="promise">
+      <h2>Private by design.</h2>
+      <p>
+        Everything lives on your device, encrypted with your passkey. Attestto never sees or sends
+        your browsing. Your data is never sold or shared.
+      </p>
+    </div>
+  </Section>
+
+  <!-- FAQ -->
+  <Section variant="light" id="faq">
+    <SectionHead label="FAQ" title="Common questions" />
+    <div class="faq">
+      {faq.map((item) => (
+        <details class="faq-item">
+          <summary>{item.q}</summary>
+          <p>{item.a}</p>
+        </details>
+      ))}
+    </div>
+  </Section>
+
+  <!-- Closing CTA -->
+  <Section variant="dark">
+    <div class="closing-cta">
+      <h2>Your identity, in your hands.</h2>
+      <p>Anti-phishing protection, passwordless sign in, and your digital ID. All in one extension.</p>
+      <div class="hero-actions">
+        <Button variant="primary" href={EXTENSION_URL} external>Add to your browser</Button>
+        <Button variant="secondary" href={GITHUB_URL} external>View on GitHub</Button>
+      </div>
+    </div>
+  </Section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: var(--space-xl) var(--space-lg);
+    background: var(--color-dark);
+    color: #ffffff;
+  }
+  .container {
+    max-width: var(--max-width, 72rem);
+    margin: 0 auto;
+    padding: 0 var(--space-md);
+  }
+  .eyebrow {
+    font-family: var(--font-mono, 'JetBrains Mono', monospace);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.8125rem;
+    color: var(--color-ink-subtle, #94a3b8);
+    margin: 0 0 var(--space-sm);
+  }
+  .hero h1 {
+    color: #ffffff;
+    font-size: clamp(2.25rem, 5vw, 3.5rem);
+    line-height: 1.1;
+    margin: 0 0 var(--space-sm);
+  }
+  .promise h2,
+  .closing-cta h2 {
+    color: #ffffff;
+  }
+  .lead {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    max-width: 42rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0 0 var(--space-md);
+  }
+  .fineprint {
+    font-size: 0.9375rem;
+    color: var(--color-ink-subtle, #94a3b8);
+    margin: var(--space-sm) 0 0;
+  }
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+
+  .promise,
+  .closing-cta {
+    text-align: center;
+    max-width: 42rem;
+    margin: 0 auto;
+  }
+  .promise p {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.9);
+  }
+  .closing-cta .hero-actions {
+    justify-content: center;
+  }
+
+  .faq {
+    display: grid;
+    gap: var(--space-xs);
+    max-width: 46rem;
+  }
+  .faq-item {
+    border: 1px solid var(--color-border, #e2e8f0);
+    border-radius: 0.5rem;
+    background: var(--color-surface, #ffffff);
+  }
+  .faq-item summary {
+    cursor: pointer;
+    padding: var(--space-sm);
+    font-weight: 600;
+    color: var(--color-ink, #0f172a);
+  }
+  .faq-item summary:focus-visible {
+    outline: 2px solid var(--color-accent, #1e40af);
+    outline-offset: 2px;
+  }
+  .faq-item p {
+    padding: 0 var(--space-sm) var(--space-sm);
+    margin: 0;
+    color: var(--color-ink-muted, #475569);
+    line-height: 1.6;
+  }
+
+  .shots {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+  }
+  @media (max-width: 48rem) {
+    .shots {
+      grid-template-columns: 1fr;
+    }
+  }
+  .shot {
+    margin: 0;
+  }
+  .shot-frame {
+    aspect-ratio: 16 / 10;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    border: 1px solid var(--color-border, #e2e8f0);
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  }
+  .shot-frame img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .shot figcaption {
+    margin-top: var(--space-xs, 0.5rem);
+    font-size: 0.9375rem;
+    color: var(--color-ink-muted, #475569);
+    line-height: 1.5;
+  }
+
+  .section-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
+  }
+</style>

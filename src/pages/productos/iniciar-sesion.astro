@@ -1,0 +1,490 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import Grid from '../../components/Grid.astro';
+import Card from '../../components/Card.astro';
+import Button from '../../components/Button.astro';
+import { LINKS } from '../../config/site';
+
+const pageTitle = 'Iniciar sesión con Attestto';
+const pageDesc =
+  'Iniciá sesión en cualquier sitio con un clic. Sin contraseñas ni usuarios. Attestto te da una identidad portátil que controlás y te protege del phishing.';
+const canonical = 'https://attestto.com/productos/iniciar-sesion/';
+
+// Enlaces externos desde la configuración central del sitio.
+const EXTENSION_URL = LINKS.extension;
+const GITHUB_URL = LINKS.github;
+const DOCS_URL = 'https://docs.attestto.com/';
+
+const faq = [
+  {
+    q: '¿Necesito crear una cuenta?',
+    a: 'No hay contraseña ni usuario que recordar. Un sitio igual puede vincular tu identidad Attestto a su propio registro la primera vez que iniciás sesión, pero nunca inventás ni escribís una credencial.',
+  },
+  {
+    q: '¿Qué pasa si pierdo mi dispositivo?',
+    a: 'Te recuperás con tu respaldo. Attestto usa recuperación social, así que perder un dispositivo no te deja afuera, que es la falla que hace riesgosos a los passkeys comunes.',
+  },
+  {
+    q: '¿Es gratis?',
+    a: 'Sí. Attestto es gratis para las personas, para siempre, para identidad, firma y verificación.',
+  },
+  {
+    q: '¿Qué ve realmente un sitio web?',
+    a: 'Solo la prueba específica que aprobás. Nunca tus llaves, y nunca más de lo que el sitio pidió.',
+  },
+  {
+    q: '¿Es más seguro que una contraseña?',
+    a: 'Sí. No hay un secreto compartido que robar, y cada inicio de sesión queda ligado criptográficamente al sitio real, así un sitio falso no puede reutilizarlo.',
+  },
+  {
+    q: '¿En qué se diferencia de los passkeys?',
+    a: 'Los passkeys te dejan entrar. Attestto te da una identidad portátil que además lleva credenciales y te protege de sitios falsos.',
+  },
+  {
+    q: '¿Cómo lo agrego a mi sitio?',
+    a: 'Agregás un botón y unas pocas líneas para verificar la prueba firmada. Mirá la sección para desarrolladores y la documentación.',
+  },
+  {
+    q: '¿Es de código abierto?',
+    a: 'Sí. La extensión y sus librerías son de código abierto.',
+  },
+];
+
+const softwareAppLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Attestto ID',
+  applicationCategory: 'SecurityApplication',
+  operatingSystem: 'Chrome, Brave, Edge',
+  description:
+    'Una extensión de navegador para iniciar sesión sin contraseñas ni usuarios. Guarda una identidad portátil que controlás, distinta en cada sitio, lleva credenciales verificables, y te avisa ante sitios de phishing e inseguros.',
+  url: canonical,
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Attestto',
+  },
+};
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a,
+    },
+  })),
+};
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDesc}
+  canonical={canonical}
+  lang="es"
+  darkHero={true}
+  jsonLd={[softwareAppLd, faqLd]}
+>
+  <!-- CAPA 1: Hero -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="container">
+      <p class="eyebrow">Iniciar sesión con Attestto</p>
+      <h1 id="hero-title">Un clic. Sin contraseñas. Sin usuarios.</h1>
+      <p class="lead">
+        Tu identidad vive en tu dispositivo, no en la base de datos de una empresa. Iniciá sesión en
+        cualquier sitio con un toque, mantené cada acceso privado, y recibí una alerta antes de
+        entregar tus datos a un sitio falso.
+      </p>
+      <div class="hero-actions">
+        <Button variant="primary" href={EXTENSION_URL} external>Instalar la extensión</Button>
+        <Button variant="secondary" href="#como-funciona">Ver cómo funciona</Button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CAPA 2: Cómo funciona -->
+  <Section variant="light" id="como-funciona">
+    <SectionHead
+      label="Cómo funciona"
+      title="Tres pasos, y estás dentro."
+      desc="Nada que crear, recordar ni filtrar."
+    />
+    <ol class="steps">
+      <li><span class="step-n" aria-hidden="true">1</span> Agregá la extensión Attestto a tu navegador.</li>
+      <li><span class="step-n" aria-hidden="true">2</span> En cualquier sitio, hacé clic en Iniciar sesión con Attestto.</li>
+      <li><span class="step-n" aria-hidden="true">3</span> Aprobá con tu huella. Eso es todo.</li>
+    </ol>
+
+    <Grid cols={2}>
+      <Card>
+        <h3>Sin contraseñas que robar</h3>
+        <p>No hay nada que suplantar, porque no hay contraseña que ingresar.</p>
+      </Card>
+      <Card>
+        <h3>Una identidad distinta en cada sitio</h3>
+        <p>Nadie puede vincular tus accesos ni seguirte por la web.</p>
+      </Card>
+      <Card>
+        <h3>Llevá tus credenciales reales</h3>
+        <p>Tu cédula, licencia o edad, compartiendo solo lo que un sitio necesita.</p>
+      </Card>
+      <Card>
+        <h3>Un escudo, no solo un login</h3>
+        <p>Attestto te avisa antes de que ingreses tus datos en un sitio inseguro o falso.</p>
+      </Card>
+    </Grid>
+  </Section>
+
+  <!-- CAPA 3: Por qué Attestto -->
+  <Section variant="plain" id="por-que">
+    <SectionHead
+      label="Por qué Attestto"
+      title="¿No es lo mismo que el login de Google, o los passkeys?"
+      desc="No, y esta es la diferencia honesta. Attestto es un inicio de sesión sin contraseñas ni usuarios que te da una identidad portátil que controlás, distinta en cada sitio para que nadie pueda correlacionarte, que además lleva credenciales verificables reales y te avisa ante sitios de phishing e inseguros."
+    />
+    <Grid cols={2}>
+      <Card>
+        <h3>Comparado con los passkeys</h3>
+        <p>
+          Los passkeys te dejan entrar pero no te dan una identidad. Cada uno queda atado a un solo
+          sitio y no lleva información tuya, y la mayoría de sitios igual te pide el correo primero.
+          Attestto es una identidad portátil en todos los sitios que además lleva credenciales, y el
+          sitio nunca tiene que programar la criptografía.
+        </p>
+      </Card>
+      <Card>
+        <h3>Comparado con las billeteras cripto</h3>
+        <p>
+          Billeteras como MetaMask se sienten parecidas, pero usan la misma llave en cada sitio, así
+          cualquiera puede rastrearte por la web, y guardan un saldo, no una identidad. Attestto usa
+          una identidad distinta e invinculable por sitio y lleva credenciales reales en vez de tokens.
+        </p>
+      </Card>
+      <Card>
+        <h3>Comparado con otras billeteras de identidad</h3>
+        <p>
+          La mayoría son apps de teléfono que te hacen escanear un código QR, y solo guardan
+          credenciales. Attestto funciona en tu navegador con un clic, y te protege activamente con
+          una barra de confianza y alertas en sitios inseguros.
+        </p>
+      </Card>
+      <Card>
+        <h3>Comparado con Google o ID.me</h3>
+        <p>
+          Los inicios de sesión federados dejan que una empresa central vea dónde y cuándo iniciás
+          sesión, y guardan una base de datos que puede ser vulnerada. Con Attestto, las llaves quedan
+          en tu dispositivo y nadie está mirando.
+        </p>
+      </Card>
+    </Grid>
+  </Section>
+
+  <!-- CAPA 3b: Tabla comparativa -->
+  <Section variant="light" id="comparar">
+    <SectionHead label="De un vistazo" title="Cómo se compara Attestto" />
+    <div class="table-wrap" role="region" aria-label="Comparación de formas de iniciar sesión" tabindex="0">
+      <table class="compare">
+        <caption>Cómo se compara Attestto con otras formas de iniciar sesión.</caption>
+        <thead>
+          <tr>
+            <th scope="col">Característica</th>
+            <th scope="col">Attestto</th>
+            <th scope="col">Passkeys</th>
+            <th scope="col">Billeteras cripto</th>
+            <th scope="col">Billeteras de identidad</th>
+            <th scope="col">Google / ID.me</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Identidad que controlás vos</th>
+            <td class="yes">Sí, la controlás vos</td>
+            <td class="no">No, una por sitio</td>
+            <td class="yes">Sí</td>
+            <td class="yes">Sí</td>
+            <td class="no">No, proveedor central</td>
+          </tr>
+          <tr>
+            <th scope="row">Invinculable entre sitios</th>
+            <td class="yes">Sí, única por sitio</td>
+            <td class="yes">Sí, por sitio</td>
+            <td class="no">No, misma llave siempre</td>
+            <td class="yes">Sí</td>
+            <td class="no">No</td>
+          </tr>
+          <tr>
+            <th scope="row">Lleva credenciales reales</th>
+            <td class="yes">Sí, cédula y más</td>
+            <td class="no">No, solo login</td>
+            <td class="no">No, tokens</td>
+            <td class="yes">Sí</td>
+            <td class="mid">Limitado, datos de perfil</td>
+          </tr>
+          <tr>
+            <th scope="row">Defensa activa contra phishing</th>
+            <td class="yes">Sí, barra y alertas</td>
+            <td class="yes">Sí, atada al sitio</td>
+            <td class="mid">Débil</td>
+            <td class="no">No, bóveda pasiva</td>
+            <td class="no">No</td>
+          </tr>
+          <tr>
+            <th scope="row">Sin usuario necesario</th>
+            <td class="yes">Sí</td>
+            <td class="no">No, suele pedir correo</td>
+            <td class="yes">Sí</td>
+            <td class="no">No, escaneo QR</td>
+            <td class="no">No, requiere cuenta</td>
+          </tr>
+          <tr>
+            <th scope="row">Fácil para desarrolladores</th>
+            <td class="yes">Sí, botón integrable</td>
+            <td class="no">Difícil, cripto en servidor</td>
+            <td class="yes">Sí, binding JS</td>
+            <td class="no">Difícil, flujo móvil</td>
+            <td class="yes">Sí, estándar</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Grid cols={2}>
+      <Card>
+        <h3>La instalación de la extensión</h3>
+        <p>
+          Para un login simple y desechable, los passkeys nativos no requieren instalación y ganan.
+          Attestto se gana la descarga cuando querés una identidad portátil, credenciales y protección
+          en tiempo real, no solo un login.
+        </p>
+      </Card>
+      <Card>
+        <h3>Sobre las cuentas</h3>
+        <p>
+          No hay contraseña ni usuario que recordar. Un sitio igual puede vincular tu identidad
+          Attestto a su propio registro la primera vez. Pensalo como sin credenciales que memorizar,
+          más que sin cuenta nunca.
+        </p>
+      </Card>
+    </Grid>
+  </Section>
+
+  <!-- CAPA 4: Para desarrolladores -->
+  <Section variant="dark" id="desarrolladores">
+    <SectionHead
+      label="Para desarrolladores"
+      title="Agregá identidad sin contraseñas en una tarde."
+      desc="Sin backend de WebAuthn. Sin restablecer contraseñas. Sin quedar atado a un proveedor. Poné un botón. La extensión hace la criptografía y le entrega a tu sitio una prueba firmada que verificás en pocas líneas."
+    />
+    <pre class="code" aria-label="Ejemplo de integración"><code>{`<!-- 1. Agregá el botón a tu página -->
+<button data-attestto-sign-in>Iniciar sesión con Attestto</button>
+
+<!-- 2. Recibí la prueba firmada que devuelve la extensión -->
+<script type="module">
+  window.addEventListener('attestto:signed', async (event) => {
+    // Enviá la prueba a tu servidor y verificá la firma.
+    await fetch('/api/verify', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(event.detail),
+    })
+  })
+</script>`}</code></pre>
+    <div class="dev-actions">
+      <Button variant="primary" href={DOCS_URL} external>Leer la documentación</Button>
+      <Button variant="secondary" href={GITHUB_URL} external>Ver en GitHub</Button>
+    </div>
+  </Section>
+
+  <!-- Preguntas frecuentes -->
+  <Section variant="light" id="faq">
+    <SectionHead label="Preguntas frecuentes" title="Preguntas comunes" />
+    <div class="faq">
+      {faq.map((item) => (
+        <details class="faq-item">
+          <summary>{item.q}</summary>
+          <p>{item.a}</p>
+        </details>
+      ))}
+    </div>
+  </Section>
+
+  <!-- Cierre -->
+  <Section variant="dark">
+    <div class="closing-cta">
+      <h2>Sin contraseñas, privado y tuyo.</h2>
+      <p>Una identidad que controlás, en cada sitio, sin nada que suplantar.</p>
+      <div class="hero-actions">
+        <Button variant="primary" href={EXTENSION_URL} external>Instalar la extensión</Button>
+        <Button variant="secondary" href={DOCS_URL} external>Documentación para desarrolladores</Button>
+      </div>
+    </div>
+  </Section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: var(--space-xl) var(--space-lg);
+    background: var(--color-dark);
+    color: #ffffff;
+  }
+  .container {
+    max-width: var(--max-width, 72rem);
+    margin: 0 auto;
+    padding: 0 var(--space-md);
+  }
+  .eyebrow {
+    font-family: var(--font-mono, 'JetBrains Mono', monospace);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.8125rem;
+    color: var(--color-ink-subtle, #94a3b8);
+    margin: 0 0 var(--space-sm);
+  }
+  .hero h1 {
+    font-size: clamp(2.25rem, 5vw, 3.5rem);
+    line-height: 1.1;
+    margin: 0 0 var(--space-sm);
+  }
+  .lead {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    max-width: 42rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0 0 var(--space-md);
+  }
+  .hero-actions,
+  .dev-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+
+  .steps {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--space-lg);
+    display: grid;
+    gap: var(--space-sm);
+    max-width: 44rem;
+  }
+  .steps li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: 1.0625rem;
+    line-height: 1.5;
+  }
+  .step-n {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 999px;
+    background: var(--color-accent, #1e40af);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.9375rem;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+    margin-bottom: var(--space-lg);
+  }
+  table.compare {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+  }
+  table.compare caption {
+    text-align: left;
+    color: var(--color-ink-muted, #475569);
+    padding-bottom: var(--space-sm);
+  }
+  table.compare th,
+  table.compare td {
+    text-align: left;
+    padding: 0.625rem 0.75rem;
+    border-bottom: 1px solid var(--color-border, #e2e8f0);
+    vertical-align: top;
+  }
+  table.compare thead th {
+    font-weight: 700;
+    border-bottom: 2px solid var(--color-border-strong, #cbd5e1);
+    white-space: nowrap;
+  }
+  table.compare tbody th[scope='row'] {
+    font-weight: 600;
+    color: var(--color-ink, #0f172a);
+  }
+  table.compare td.yes {
+    color: var(--color-verified-700, #15803d);
+    font-weight: 600;
+  }
+  table.compare td.no {
+    color: var(--color-ink-muted, #475569);
+  }
+  table.compare td.mid {
+    color: var(--color-ink-muted, #475569);
+    font-style: italic;
+  }
+
+  .faq {
+    display: grid;
+    gap: var(--space-xs);
+    max-width: 46rem;
+  }
+  .faq-item {
+    border: 1px solid var(--color-border, #e2e8f0);
+    border-radius: 0.5rem;
+    background: var(--color-surface, #ffffff);
+  }
+  .faq-item summary {
+    cursor: pointer;
+    padding: var(--space-sm);
+    font-weight: 600;
+    color: var(--color-ink, #0f172a);
+  }
+  .faq-item summary:focus-visible {
+    outline: 2px solid var(--color-accent, #1e40af);
+    outline-offset: 2px;
+  }
+  .faq-item p {
+    padding: 0 var(--space-sm) var(--space-sm);
+    margin: 0;
+    color: var(--color-ink-muted, #475569);
+    line-height: 1.6;
+  }
+
+  pre.code {
+    background: #0b1220;
+    color: #e2e8f0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    padding: var(--space-md);
+    overflow-x: auto;
+    font-family: var(--font-mono, 'JetBrains Mono', monospace);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    margin: 0 0 var(--space-md);
+  }
+
+  .closing-cta {
+    text-align: center;
+    max-width: 40rem;
+    margin: 0 auto;
+  }
+  .closing-cta .hero-actions {
+    justify-content: center;
+  }
+</style>

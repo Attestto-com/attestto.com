@@ -69,6 +69,14 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.15;
 }
 
+/* Headings sit on the dark hero background, so they must be light. Needed
+   because --color-dark and --color-ink are the same value, which would
+   otherwise render the hero title invisible (dark on dark). */
+.hero h1,
+.hero h2 {
+  color: #ffffff;
+}
+
 h1 { font-size: var(--text-h1-size); line-height: var(--text-h1-line); }
 h2 { font-size: var(--text-h2-size); line-height: var(--text-h2-line); }
 h3 { font-size: var(--text-h3-size); line-height: var(--text-h3-line); }
