@@ -1,0 +1,58 @@
+---
+/**
+ * <DigitalIdCta> — the header "Sign in with Attestto" button.
+ *
+ * It is a plain link to the login page (LINKS.signIn, e.g. /app/login). The
+ * marketing site does NOT run the credential flow inline; the login page owns
+ * that (first-time onboarding, returning sign-in, or "install the extension").
+ * Change the destination once in src/config/site.ts.
+ */
+import { LINKS } from '../config/site';
+
+interface Props {
+  lang?: 'en' | 'es';
+  variant?: 'header' | 'mobile';
+}
+const { lang = 'en', variant = 'header' } = Astro.props;
+const label = lang === 'es' ? 'Iniciar sesión con Attestto' : 'Sign in with Attestto';
+---
+
+<a
+  href={LINKS.signIn}
+  class:list={['digital-id-cta', variant === 'mobile' ? 'is-mobile' : 'is-header']}
+>{label}</a>
+
+<style>
+  .digital-id-cta {
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    background: #ffffff;
+    color: var(--color-ink);
+    border-radius: var(--radius-md);
+    font-family: var(--font-sans);
+    font-size: var(--text-small-size);
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.15s;
+  }
+  .digital-id-cta:hover {
+    background: var(--color-border);
+    text-decoration: none;
+  }
+  /* Header: hidden on small screens (the mobile menu carries its own). */
+  .is-header {
+    display: none;
+  }
+  @media (min-width: 768px) {
+    .is-header {
+      display: inline-flex;
+    }
+  }
+  .is-mobile {
+    display: inline-block;
+    margin-block-start: var(--space-2);
+    padding: 0.625rem 1rem;
+  }
+</style>

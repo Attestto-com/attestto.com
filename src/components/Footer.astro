@@ -3,12 +3,14 @@
  * <Footer> — dark navy footer. Ports OLD site's footer with LEI badge + links.
  */
 import LEIBadge from './LEIBadge.astro';
+import { footerLinks } from '../config/site';
 
 interface Props {
   lang?: 'en' | 'es';
 }
 
 const { lang = 'en' } = Astro.props;
+const links = footerLinks(lang);
 const year = new Date().getFullYear();
 ---
 <footer class="site-footer">
@@ -19,10 +21,9 @@ const year = new Date().getFullYear();
     </div>
 
     <div class="footer-links">
-      <a href="https://github.com/Attestto-com" rel="noopener" target="_blank">GitHub</a>
-      <a href="https://attestto.org" rel="noopener" target="_blank">Attestto Open</a>
-      <a href="https://spec.attestto.com" rel="noopener" target="_blank">Standards</a>
-      <a href="mailto:hello@attestto.com">Contact</a>
+      {links.map((l) => (
+        <a href={l.href} {...(l.external ? { rel: 'noopener', target: '_blank' } : {})}>{l.label}</a>
+      ))}
     </div>
   </div>
 

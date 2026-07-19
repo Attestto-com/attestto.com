@@ -10,6 +10,7 @@ import OpenBanner from '../components/OpenBanner.astro';
 import RepoPill from '../components/RepoPill.astro';
 import ShipStatus from '../components/ShipStatus.astro';
 import { getCollection } from 'astro:content';
+import { LINKS } from '../config/site';
 
 const posts = (await getCollection('blog', ({ data }) => import.meta.env.PROD ? !data.draft : true))
   .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime())
@@ -142,7 +143,7 @@ const softwareSchema = {
         <h3>Credential Wallet <ShipStatus status="shipped" /></h3>
         <p>Digital ID credential wallet across three surfaces. Browser extension for web verification, desktop app for signing keys outside the browser TCB, mobile app for biometric capture and presentation. Store, present, and share credentials with selective disclosure. SD-JWT + JSON-LD, DIDComm v2, Shamir 2-of-3 recovery. Extension: shipped. Desktop and mobile apps: in progress.</p>
         <div class="card-pills">
-          <RepoPill href="https://app.attestto.com" label="app.attestto.com" type="live" />
+          <RepoPill href={LINKS.extension} label="Chrome Web Store" type="live" />
           <RepoPill href="https://github.com/Attestto-com/id-wallet-adapter" label="id-wallet-adapter" type="github" />
         </div>
       </Card>

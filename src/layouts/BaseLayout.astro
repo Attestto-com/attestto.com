@@ -13,6 +13,12 @@ import '../styles/global.css';
 
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+
+interface Crumb {
+  name: string;
+  href: string;
+}
 
 interface Props {
   title: string;
@@ -22,6 +28,8 @@ interface Props {
   lang?: 'en' | 'es';
   darkHero?: boolean;
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  /** Explicit breadcrumb trail. When omitted, one is derived from the URL. */
+  breadcrumbs?: Crumb[];
 }
 
 const {
@@ -32,7 +40,28 @@ const {
   lang = 'en',
   darkHero = false,
   jsonLd,
+  breadcrumbs,
 } = Astro.props;
+
+// Breadcrumbs: use the provided trail, or derive one from the URL path. The
+// home page (no path segments) gets none.
+const SEG_LABELS: Record<string, string> = {
+  products: 'Products',
+  productos: 'Productos',
+  blog: 'Blog',
+};
+const pathSegments = new URL(canonical).pathname.split('/').filter(Boolean);
+const derivedCrumbs: Crumb[] =
+  pathSegments.length === 0
+    ? []
+    : [
+        { name: lang === 'es' ? 'Inicio' : 'Home', href: '/' },
+        ...pathSegments.map((seg, i) => ({
+          name: i === pathSegments.length - 1 ? title : (SEG_LABELS[seg] ?? seg),
+          href: '/' + pathSegments.slice(0, i + 1).join('/') + '/',
+        })),
+      ];
+const resolvedCrumbs = breadcrumbs ?? derivedCrumbs;
 
 const siteName = 'Attestto';
 const fullTitle = title === siteName ? title : `${title} · ${siteName}`;
@@ -112,6 +141,7 @@ const jsonLdBlocks = [organizationLd, websiteLd, ...(jsonLd ? (Array.isArray(jso
 <body class:list={[{ 'dark-hero': darkHero }]}>
   <a href="#main" class="skip-link">Skip to main content</a>
   <Header lang={lang} />
+  {resolvedCrumbs.length > 1 && <Breadcrumbs items={resolvedCrumbs} />}
   <main id="main">
     <slot />
   </main>

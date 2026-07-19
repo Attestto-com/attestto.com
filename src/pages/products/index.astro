@@ -1,0 +1,113 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import Grid from '../../components/Grid.astro';
+import Card from '../../components/Card.astro';
+import Button from '../../components/Button.astro';
+
+const pageTitle = 'Products';
+const pageDesc =
+  'Attestto products: passwordless Sign in with Attestto, qualified digital signatures with Firma Digital, and your Digital IDs with documents in your Bóveda.';
+const canonical = 'https://attestto.com/products/';
+
+const products = [
+  {
+    name: 'Attestto for your browser',
+    href: '/products/extension',
+    desc: 'Anti-phishing protection, passwordless sign in, and your digital ID with verifiable credentials, all in one browser extension.',
+  },
+  {
+    name: 'Sign in with Attestto',
+    href: '/products/sign-in',
+    desc: 'Passwordless, username-less login. A portable identity you control, private on every site, that warns you off phishing.',
+  },
+  {
+    name: 'Firma Digital',
+    href: '/firma-digital',
+    desc: 'Qualified digital signatures and verification for regulated documents.',
+  },
+  {
+    name: 'Digital IDs',
+    href: '/personas',
+    desc: 'Your ID, license, and passport in one place. Hold your identity documents and credentials in your Bóveda, and choose what to share each time.',
+  },
+];
+
+const itemListLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Attestto products',
+  itemListElement: products.map((p, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: p.name,
+    url: `https://attestto.com${p.href}`,
+  })),
+};
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDesc}
+  canonical={canonical}
+  lang="en"
+  darkHero={true}
+  jsonLd={itemListLd}
+>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="container">
+      <p class="eyebrow">Products</p>
+      <h1 id="hero-title">Identity, signing, and trust.</h1>
+      <p class="lead">
+        Built on open standards, controlled by the person. Choose a product to learn more.
+      </p>
+    </div>
+  </section>
+
+  <Section variant="light">
+    <SectionHead label="Explore" title="Attestto products" />
+    <Grid cols={3}>
+      {products.map((p) => (
+        <Card>
+          <h3>{p.name}</h3>
+          <p>{p.desc}</p>
+          <Button variant="secondary" href={p.href}>Learn more</Button>
+        </Card>
+      ))}
+    </Grid>
+  </Section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: var(--space-xl) var(--space-lg);
+    background: var(--color-dark);
+    color: #ffffff;
+  }
+  .container {
+    max-width: var(--max-width, 72rem);
+    margin: 0 auto;
+    padding: 0 var(--space-md);
+  }
+  .eyebrow {
+    font-family: var(--font-mono, 'JetBrains Mono', monospace);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.8125rem;
+    color: var(--color-ink-subtle, #94a3b8);
+    margin: 0 0 var(--space-sm);
+  }
+  .hero h1 {
+    font-size: clamp(2.25rem, 5vw, 3.5rem);
+    line-height: 1.1;
+    margin: 0 0 var(--space-sm);
+  }
+  .lead {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    max-width: 42rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0;
+  }
+</style>

@@ -5,6 +5,7 @@ import SectionHead from '../components/SectionHead.astro';
 import Grid from '../components/Grid.astro';
 import Card from '../components/Card.astro';
 import Button from '../components/Button.astro';
+import { LINKS } from '../config/site';
 ---
 <BaseLayout
   title="Personas"
@@ -21,7 +22,7 @@ import Button from '../components/Button.astro';
         sin billeteras, sin palabras raras. Nunca.
       </p>
       <div class="hero-actions">
-        <Button variant="primary" href="https://app.attestto.com" external>Crear mi Digital ID</Button>
+        <Button variant="primary" href={LINKS.extension} external>Crear mi Digital ID</Button>
         <Button variant="secondary" href="#como-funciona">Cómo funciona</Button>
       </div>
     </div>
@@ -62,7 +63,7 @@ import Button from '../components/Button.astro';
         Un Digital ID que respeta a la persona detrás de la pantalla. Sin publicidad, sin venta de
         datos, sin intermediarios entre vos y tus documentos.
       </p>
-      <Button variant="primary" href="https://app.attestto.com" external>Empezar ahora</Button>
+      <Button variant="primary" href={LINKS.extension} external>Empezar ahora</Button>
     </div>
   </Section>
 </BaseLayout>

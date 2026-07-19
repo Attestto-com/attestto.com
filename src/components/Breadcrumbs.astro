@@ -1,0 +1,84 @@
+---
+// Accessible breadcrumb bar that also emits schema.org BreadcrumbList JSON-LD.
+// Pass the trail from root to current page; the last item is the current page.
+interface Crumb {
+  name: string;
+  href: string;
+}
+interface Props {
+  items: Crumb[];
+}
+const { items } = Astro.props;
+const origin = (Astro.site ?? new URL('https://attestto.com')).origin;
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: items.map((c, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: c.name,
+    item: new URL(c.href, origin).href,
+  })),
+};
+---
+
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+  <div class="bc-inner">
+    <ol>
+      {items.map((c, i) => (
+        <li>
+          {i < items.length - 1 ? (
+            <a href={c.href}>{c.name}</a>
+          ) : (
+            <span aria-current="page">{c.name}</span>
+          )}
+        </li>
+      ))}
+    </ol>
+  </div>
+</nav>
+<script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
+
+<style>
+  .breadcrumbs {
+    background: var(--color-surface, #ffffff);
+    border-bottom: 1px solid var(--color-border, #e2e8f0);
+  }
+  .bc-inner {
+    max-width: var(--max-width, 72rem);
+    margin: 0 auto;
+    padding: var(--space-xs, 0.5rem) var(--space-md);
+  }
+  ol {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.5rem;
+    margin: 0;
+    padding: 0;
+    font-size: 0.875rem;
+    color: var(--color-ink-muted, #475569);
+  }
+  li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  li:not(:last-child)::after {
+    content: '/';
+    color: var(--color-ink-subtle, #94a3b8);
+  }
+  a {
+    color: var(--color-ink-muted, #475569);
+    text-decoration: none;
+  }
+  a:hover {
+    color: var(--color-accent, #1e40af);
+    text-decoration: underline;
+  }
+  span[aria-current='page'] {
+    color: var(--color-ink, #0f172a);
+    font-weight: 600;
+  }
+</style>

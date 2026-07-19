@@ -1,0 +1,167 @@
+---
+// Media carousel: an optional video as the first slide, then screenshots.
+// Scroll-snap track (swipeable on touch) with prev/next buttons on wider views.
+interface Shot {
+  src: string;
+  caption: string;
+}
+interface Props {
+  videoId?: string;
+  videoTitle: string;
+  videoCaption?: string;
+  shots: Shot[];
+  prevLabel?: string;
+  nextLabel?: string;
+}
+const {
+  videoId,
+  videoTitle,
+  videoCaption,
+  shots,
+  prevLabel = 'Previous',
+  nextLabel = 'Next',
+} = Astro.props;
+---
+
+<div class="carousel" data-carousel>
+  <button class="carousel-btn" type="button" data-carousel-prev aria-label={prevLabel}>
+    <span aria-hidden="true">&lsaquo;</span>
+  </button>
+
+  <div class="carousel-track" data-carousel-track tabindex="0" aria-label={videoTitle}>
+    <figure class="carousel-slide">
+      <div class="slide-media">
+        {videoId ? (
+          <iframe
+            src={`https://www.youtube-nocookie.com/embed/${videoId}`}
+            title={videoTitle}
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+          ></iframe>
+        ) : (
+          <span class="ph" aria-hidden="true">Video</span>
+        )}
+      </div>
+      {videoCaption && <figcaption>{videoCaption}</figcaption>}
+    </figure>
+
+    {shots.map((s) => (
+      <figure class="carousel-slide">
+        <div class="slide-media">
+          <img src={s.src} alt={s.caption} width="1280" height="800" loading="lazy" />
+        </div>
+        <figcaption>{s.caption}</figcaption>
+      </figure>
+    ))}
+  </div>
+
+  <button class="carousel-btn" type="button" data-carousel-next aria-label={nextLabel}>
+    <span aria-hidden="true">&rsaquo;</span>
+  </button>
+</div>
+
+<script>
+  document.querySelectorAll('[data-carousel]').forEach((c) => {
+    const track = c.querySelector('[data-carousel-track]');
+    if (!(track instanceof HTMLElement)) return;
+    const by = (dir: number) => track.scrollBy({ left: dir * track.clientWidth, behavior: 'smooth' });
+    c.querySelector('[data-carousel-prev]')?.addEventListener('click', () => by(-1));
+    c.querySelector('[data-carousel-next]')?.addEventListener('click', () => by(1));
+  });
+</script>
+
+<style>
+  .carousel {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs, 0.5rem);
+  }
+  .carousel-track {
+    display: flex;
+    gap: var(--space-md);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    flex: 1;
+    padding-bottom: var(--space-xs, 0.5rem);
+    scrollbar-width: thin;
+  }
+  .carousel-track:focus-visible {
+    outline: 2px solid var(--color-accent, #1e40af);
+    outline-offset: 4px;
+    border-radius: 0.5rem;
+  }
+  .carousel-slide {
+    margin: 0;
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+  }
+  @media (min-width: 48rem) {
+    .carousel-slide {
+      flex-basis: calc(62% - var(--space-md));
+    }
+  }
+  .slide-media {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    border: 1px solid var(--color-border, #e2e8f0);
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .slide-media img,
+  .slide-media iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    object-fit: cover;
+  }
+  .ph {
+    font-family: var(--font-mono, 'JetBrains Mono', monospace);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.5);
+  }
+  .carousel-slide figcaption {
+    margin-top: var(--space-xs, 0.5rem);
+    font-size: 0.9375rem;
+    color: var(--color-ink-muted, #475569);
+    line-height: 1.5;
+  }
+  .carousel-btn {
+    flex: 0 0 auto;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-border, #e2e8f0);
+    background: var(--color-surface, #ffffff);
+    color: var(--color-ink, #0f172a);
+    font-size: 1.75rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .carousel-btn:hover {
+    border-color: var(--color-accent, #1e40af);
+    color: var(--color-accent, #1e40af);
+  }
+  .carousel-btn:focus-visible {
+    outline: 2px solid var(--color-accent, #1e40af);
+    outline-offset: 2px;
+  }
+  @media (max-width: 48rem) {
+    .carousel-btn {
+      display: none;
+    }
+  }
+</style>

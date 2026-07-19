@@ -13,13 +13,13 @@
     "check:only": "node scripts/check-quality.mjs"
   },
   "dependencies": {
-    "astro": "^5.0.0",
-    "@astrojs/sitemap": "^3.2.1",
     "@astrojs/mdx": "^4.0.0",
     "@astrojs/rss": "^4.0.9",
-    "@fontsource/inter": "^5.1.0",
+    "@astrojs/sitemap": "^3.2.1",
     "@fontsource/ibm-plex-serif": "^5.1.0",
-    "@fontsource/jetbrains-mono": "^5.1.0"
+    "@fontsource/inter": "^5.1.0",
+    "@fontsource/jetbrains-mono": "^5.1.0",
+    "astro": "^5.0.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",

@@ -1,0 +1,490 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import Grid from '../../components/Grid.astro';
+import Card from '../../components/Card.astro';
+import Button from '../../components/Button.astro';
+import { LINKS } from '../../config/site';
+
+const pageTitle = 'Sign in with Attestto';
+const pageDesc =
+  'Sign in to any website with one click. No passwords, no usernames. Attestto gives you a portable identity you control that also warns you off phishing.';
+const canonical = 'https://attestto.com/products/sign-in/';
+
+// External links from the central site config.
+const EXTENSION_URL = LINKS.extension;
+const GITHUB_URL = LINKS.github;
+const DOCS_URL = 'https://docs.attestto.com/';
+
+const faq = [
+  {
+    q: 'Do I need to create an account?',
+    a: 'There is no password and no username to remember. A website may still link your Attestto identity to its own record the first time you sign in, but you never invent or type a credential.',
+  },
+  {
+    q: 'What if I lose my device?',
+    a: 'You recover with your backup. Attestto uses social recovery, so losing one device does not lock you out, which is the gap that makes plain passkeys risky.',
+  },
+  {
+    q: 'Is it free?',
+    a: 'Yes. Attestto is free for individuals, forever, for identity, signing, and verification.',
+  },
+  {
+    q: 'What does a website actually see?',
+    a: 'Only the specific proof you approve. Never your keys, and never more than the site asked for.',
+  },
+  {
+    q: 'Is it more secure than a password?',
+    a: 'Yes. There is no shared secret to steal, and every sign in is cryptographically bound to the real website, so a fake site cannot reuse it.',
+  },
+  {
+    q: 'How is it different from passkeys?',
+    a: 'Passkeys log you in. Attestto gives you a portable identity that also carries credentials and protects you from fake sites.',
+  },
+  {
+    q: 'How do I add it to my site?',
+    a: 'You add a button and a few lines to verify the signed proof. See the developer section below and the documentation.',
+  },
+  {
+    q: 'Is it open source?',
+    a: 'Yes. The extension and its libraries are open source.',
+  },
+];
+
+const softwareAppLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Attestto ID',
+  applicationCategory: 'SecurityApplication',
+  operatingSystem: 'Chrome, Brave, Edge',
+  description:
+    'A browser extension for passwordless, username-less sign in. It holds a portable identity you control, different on every site, carries verifiable credentials, and warns you off phishing and insecure sites.',
+  url: canonical,
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Attestto',
+  },
+};
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a,
+    },
+  })),
+};
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDesc}
+  canonical={canonical}
+  lang="en"
+  darkHero={true}
+  jsonLd={[softwareAppLd, faqLd]}
+>
+  <!-- LAYER 1: Hero (end user, zero jargon) -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="container">
+      <p class="eyebrow">Sign in with Attestto</p>
+      <h1 id="hero-title">One click. No passwords. No usernames.</h1>
+      <p class="lead">
+        Your identity lives on your device, not in a company database. Sign in to any website
+        with a tap, keep every login private, and get warned before you hand your data to a fake site.
+      </p>
+      <div class="hero-actions">
+        <Button variant="primary" href={EXTENSION_URL} external>Get the extension</Button>
+        <Button variant="secondary" href="#how-it-works">See how it works</Button>
+      </div>
+    </div>
+  </section>
+
+  <!-- LAYER 2: How it works (still end user) -->
+  <Section variant="light" id="how-it-works">
+    <SectionHead
+      label="How it works"
+      title="Three steps, then you are in."
+      desc="Nothing to create, remember, or leak."
+    />
+    <ol class="steps">
+      <li><span class="step-n" aria-hidden="true">1</span> Add the Attestto extension to your browser.</li>
+      <li><span class="step-n" aria-hidden="true">2</span> On any site, click Sign in with Attestto.</li>
+      <li><span class="step-n" aria-hidden="true">3</span> Approve with your fingerprint. That is it.</li>
+    </ol>
+
+    <Grid cols={2}>
+      <Card>
+        <h3>No password to steal</h3>
+        <p>There is nothing to phish, because there is no password to enter.</p>
+      </Card>
+      <Card>
+        <h3>A different identity on every site</h3>
+        <p>No one can link your logins or follow you across the web.</p>
+      </Card>
+      <Card>
+        <h3>Carry your real credentials</h3>
+        <p>Your ID, license, or age, sharing only what a site needs.</p>
+      </Card>
+      <Card>
+        <h3>A shield, not just a login</h3>
+        <p>Attestto warns you before you type your data into an unsafe or fake site.</p>
+      </Card>
+    </Grid>
+  </Section>
+
+  <!-- LAYER 3: Why Attestto (skeptic, first tech reveal) -->
+  <Section variant="plain" id="why">
+    <SectionHead
+      label="Why Attestto"
+      title="Is this just Google login, or passkeys?"
+      desc="No, and here is the honest difference. Attestto is a passwordless, username-less login that hands you a portable identity you control, different on every site so no one can correlate you, that also carries real verifiable credentials and warns you off phishing and insecure sites."
+    />
+    <Grid cols={2}>
+      <Card>
+        <h3>Compared to passkeys</h3>
+        <p>
+          Passkeys log you in but do not give you an identity. Each one is locked to a single site
+          and holds no information about you, and most sites still ask for your email first. Attestto
+          is one portable identity across sites that also carries credentials, and the website never
+          has to build the cryptography.
+        </p>
+      </Card>
+      <Card>
+        <h3>Compared to crypto wallets</h3>
+        <p>
+          Wallets like MetaMask feel similar, but they use the same key on every site, so anyone can
+          track you across the web, and they hold a balance, not an identity. Attestto uses a
+          different, unlinkable identity per site and carries real credentials instead of tokens.
+        </p>
+      </Card>
+      <Card>
+        <h3>Compared to other identity wallets</h3>
+        <p>
+          Most are phone apps that make you scan a QR code, and they only store credentials. Attestto
+          works right in your browser with one click, and it actively protects you with a trust bar
+          and warnings on unsafe sites.
+        </p>
+      </Card>
+      <Card>
+        <h3>Compared to Google or ID.me</h3>
+        <p>
+          Federated logins let a central company watch where and when you sign in, and they keep a
+          database that can be breached. With Attestto, the keys stay on your device and no one is
+          watching.
+        </p>
+      </Card>
+    </Grid>
+  </Section>
+
+  <!-- LAYER 3b: Comparison matrix (semantic table) -->
+  <Section variant="light" id="compare">
+    <SectionHead label="At a glance" title="How Attestto compares" />
+    <div class="table-wrap" role="region" aria-label="Comparison of sign-in methods" tabindex="0">
+      <table class="compare">
+        <caption>How Attestto compares to other ways to sign in.</caption>
+        <thead>
+          <tr>
+            <th scope="col">Feature</th>
+            <th scope="col">Attestto</th>
+            <th scope="col">Passkeys</th>
+            <th scope="col">Crypto wallets</th>
+            <th scope="col">Identity wallets</th>
+            <th scope="col">Google / ID.me</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Identity you hold</th>
+            <td class="yes">Yes, you hold it</td>
+            <td class="no">No, one per site</td>
+            <td class="yes">Yes</td>
+            <td class="yes">Yes</td>
+            <td class="no">No, central provider</td>
+          </tr>
+          <tr>
+            <th scope="row">Unlinkable across sites</th>
+            <td class="yes">Yes, unique per site</td>
+            <td class="yes">Yes, per site</td>
+            <td class="no">No, same key everywhere</td>
+            <td class="yes">Yes</td>
+            <td class="no">No</td>
+          </tr>
+          <tr>
+            <th scope="row">Carries real credentials</th>
+            <td class="yes">Yes, ID and more</td>
+            <td class="no">No, login only</td>
+            <td class="no">No, tokens</td>
+            <td class="yes">Yes</td>
+            <td class="mid">Limited profile data</td>
+          </tr>
+          <tr>
+            <th scope="row">Active phishing defense</th>
+            <td class="yes">Yes, trust bar and warnings</td>
+            <td class="yes">Yes, site bound</td>
+            <td class="mid">Weak</td>
+            <td class="no">No, passive vault</td>
+            <td class="no">No</td>
+          </tr>
+          <tr>
+            <th scope="row">No username needed</th>
+            <td class="yes">Yes</td>
+            <td class="no">No, usually needs email</td>
+            <td class="yes">Yes</td>
+            <td class="no">No, QR scan</td>
+            <td class="no">No, needs account</td>
+          </tr>
+          <tr>
+            <th scope="row">Easy for developers</th>
+            <td class="yes">Yes, drop-in button</td>
+            <td class="no">Hard, server crypto</td>
+            <td class="yes">Yes, JS binding</td>
+            <td class="no">Hard, mobile flow</td>
+            <td class="yes">Yes, standard</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Grid cols={2}>
+      <Card>
+        <h3>The extension install</h3>
+        <p>
+          For a simple, throwaway login, native passkeys need no install and win. Attestto earns the
+          download when you want a portable identity, credentials, and real-time protection, not just
+          a login.
+        </p>
+      </Card>
+      <Card>
+        <h3>About accounts</h3>
+        <p>
+          There is no password or username to remember. A site may still link your Attestto identity
+          to its own record the first time you sign in. Think no credentials to memorize, rather than
+          no account ever.
+        </p>
+      </Card>
+    </Grid>
+  </Section>
+
+  <!-- LAYER 4: For developers (CTO / webmaster, full tech) -->
+  <Section variant="dark" id="developers">
+    <SectionHead
+      label="For developers"
+      title="Add passwordless identity in an afternoon."
+      desc="No WebAuthn backend. No password resets. No vendor lock-in. Drop in a button. The extension does the cryptography and hands your site a signed proof it can verify in a few lines."
+    />
+    <pre class="code" aria-label="Example integration code"><code>{`<!-- 1. Add the button to your page -->
+<button data-attestto-sign-in>Sign in with Attestto</button>
+
+<!-- 2. Receive the signed proof the extension returns -->
+<script type="module">
+  window.addEventListener('attestto:signed', async (event) => {
+    // Send the proof to your server and verify the signature.
+    await fetch('/api/verify', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(event.detail),
+    })
+  })
+</script>`}</code></pre>
+    <div class="dev-actions">
+      <Button variant="primary" href={DOCS_URL} external>Read the docs</Button>
+      <Button variant="secondary" href={GITHUB_URL} external>View on GitHub</Button>
+    </div>
+  </Section>
+
+  <!-- FAQ (accessible details, matches FAQPage schema) -->
+  <Section variant="light" id="faq">
+    <SectionHead label="FAQ" title="Common questions" />
+    <div class="faq">
+      {faq.map((item) => (
+        <details class="faq-item">
+          <summary>{item.q}</summary>
+          <p>{item.a}</p>
+        </details>
+      ))}
+    </div>
+  </Section>
+
+  <!-- Closing dual CTA -->
+  <Section variant="dark">
+    <div class="closing-cta">
+      <h2>Passwordless, private, and yours.</h2>
+      <p>One identity you control, on every site, with nothing to phish.</p>
+      <div class="hero-actions">
+        <Button variant="primary" href={EXTENSION_URL} external>Get the extension</Button>
+        <Button variant="secondary" href={DOCS_URL} external>Developer docs</Button>
+      </div>
+    </div>
+  </Section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: var(--space-xl) var(--space-lg);
+    background: var(--color-dark);
+    color: #ffffff;
+  }
+  .container {
+    max-width: var(--max-width, 72rem);
+    margin: 0 auto;
+    padding: 0 var(--space-md);
+  }
+  .eyebrow {
+    font-family: var(--font-mono, 'JetBrains Mono', monospace);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.8125rem;
+    color: var(--color-ink-subtle, #94a3b8);
+    margin: 0 0 var(--space-sm);
+  }
+  .hero h1 {
+    font-size: clamp(2.25rem, 5vw, 3.5rem);
+    line-height: 1.1;
+    margin: 0 0 var(--space-sm);
+  }
+  .lead {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    max-width: 42rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0 0 var(--space-md);
+  }
+  .hero-actions,
+  .dev-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+
+  .steps {
+    list-style: none;
+    counter-reset: none;
+    padding: 0;
+    margin: 0 0 var(--space-lg);
+    display: grid;
+    gap: var(--space-sm);
+    max-width: 44rem;
+  }
+  .steps li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: 1.0625rem;
+    line-height: 1.5;
+  }
+  .step-n {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 999px;
+    background: var(--color-accent, #1e40af);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.9375rem;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+    margin-bottom: var(--space-lg);
+  }
+  table.compare {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+  }
+  table.compare caption {
+    text-align: left;
+    color: var(--color-ink-muted, #475569);
+    padding-bottom: var(--space-sm);
+  }
+  table.compare th,
+  table.compare td {
+    text-align: left;
+    padding: 0.625rem 0.75rem;
+    border-bottom: 1px solid var(--color-border, #e2e8f0);
+    vertical-align: top;
+  }
+  table.compare thead th {
+    font-weight: 700;
+    border-bottom: 2px solid var(--color-border-strong, #cbd5e1);
+    white-space: nowrap;
+  }
+  table.compare tbody th[scope='row'] {
+    font-weight: 600;
+    color: var(--color-ink, #0f172a);
+  }
+  table.compare td.yes {
+    color: var(--color-verified-700, #15803d);
+    font-weight: 600;
+  }
+  table.compare td.no {
+    color: var(--color-ink-muted, #475569);
+  }
+  table.compare td.mid {
+    color: var(--color-ink-muted, #475569);
+    font-style: italic;
+  }
+
+  .faq {
+    display: grid;
+    gap: var(--space-xs);
+    max-width: 46rem;
+  }
+  .faq-item {
+    border: 1px solid var(--color-border, #e2e8f0);
+    border-radius: 0.5rem;
+    background: var(--color-surface, #ffffff);
+  }
+  .faq-item summary {
+    cursor: pointer;
+    padding: var(--space-sm);
+    font-weight: 600;
+    color: var(--color-ink, #0f172a);
+  }
+  .faq-item summary:focus-visible {
+    outline: 2px solid var(--color-accent, #1e40af);
+    outline-offset: 2px;
+  }
+  .faq-item p {
+    padding: 0 var(--space-sm) var(--space-sm);
+    margin: 0;
+    color: var(--color-ink-muted, #475569);
+    line-height: 1.6;
+  }
+
+  pre.code {
+    background: #0b1220;
+    color: #e2e8f0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    padding: var(--space-md);
+    overflow-x: auto;
+    font-family: var(--font-mono, 'JetBrains Mono', monospace);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    margin: 0 0 var(--space-md);
+  }
+
+  .closing-cta {
+    text-align: center;
+    max-width: 40rem;
+    margin: 0 auto;
+  }
+  .closing-cta .hero-actions {
+    justify-content: center;
+  }
+</style>
