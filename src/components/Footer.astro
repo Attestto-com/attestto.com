@@ -3,6 +3,7 @@
  * <Footer> — dark navy footer. Ports OLD site's footer with LEI badge + links.
  */
 import LEIBadge from './LEIBadge.astro';
+import SubscribeForm from './SubscribeForm.astro';
 import { footerLinks } from '../config/site';
 
 interface Props {
@@ -18,6 +19,10 @@ const year = new Date().getFullYear();
     <div class="footer-brand">
       <span class="brand-name">Attestto</span>
       <LEIBadge />
+    </div>
+
+    <div class="footer-subscribe">
+      <SubscribeForm lang={lang} source="footer" variant="compact" />
     </div>
 
     <div class="footer-links">
@@ -60,6 +65,8 @@ const year = new Date().getFullYear();
     color: rgba(255, 255, 255, 0.85);
     font-weight: 600;
   }
+
+  .footer-subscribe { flex: 1 1 22rem; max-width: 30rem; }
 
   .footer-links {
     display: flex;
