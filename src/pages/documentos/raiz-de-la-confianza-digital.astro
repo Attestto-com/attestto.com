@@ -1,0 +1,10 @@
+---
+import { getEntry } from 'astro:content';
+import WhitepaperLayout from '../../layouts/WhitepaperLayout.astro';
+
+const entry = await getEntry('whitepaper', 'raiz-de-la-confianza-digital');
+const { Content } = await entry.render();
+---
+<WhitepaperLayout entry={entry}>
+  <Content />
+</WhitepaperLayout>

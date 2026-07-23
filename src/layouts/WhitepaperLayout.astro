@@ -1,0 +1,112 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import SubscribeForm from '../components/SubscribeForm.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'whitepaper'>;
+}
+
+const { entry } = Astro.props;
+const { data } = entry;
+
+const canonicalHref = data.canonicalUrl ?? new URL(Astro.url.pathname, Astro.site ?? 'https://attestto.com').href;
+const isEs = data.lang === 'es';
+
+// hreflang pair: EN page + its ES alternate (data.altHref points to the other language).
+const alternates = isEs
+  ? { es: Astro.url.pathname, en: data.altHref }
+  : { en: Astro.url.pathname, es: data.altHref };
+
+// Per-language Buttondown tag so the whitepaper's captures are attributable.
+const source = isEs ? 'whitepaper-trust-root-es' : 'whitepaper-trust-root';
+
+const techArticleLd = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: data.title,
+  description: data.description,
+  inLanguage: isEs ? 'es-CR' : 'en-US',
+  datePublished: data.publishDate.toISOString(),
+  author: { '@type': 'Organization', name: 'Attestto', url: 'https://attestto.com' },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Attestto',
+    logo: { '@type': 'ImageObject', url: 'https://attestto.com/logo.svg' },
+  },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalHref },
+  isAccessibleForFree: true,
+};
+
+const homeName = isEs ? 'Inicio' : 'Home';
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: homeName, item: 'https://attestto.com/' },
+    { '@type': 'ListItem', position: 2, name: data.title },
+  ],
+};
+
+const pdfLabel = isEs ? 'Descargar PDF' : 'Download PDF';
+const fmtDate = new Intl.DateTimeFormat(isEs ? 'es-CR' : 'en-US', {
+  year: 'numeric', month: 'long', day: 'numeric',
+});
+---
+<BaseLayout
+  title={data.title}
+  description={data.description}
+  canonical={data.canonicalUrl}
+  ogImage={data.ogImage}
+  lang={data.lang}
+  alternates={alternates}
+  jsonLd={[techArticleLd, breadcrumbLd]}
+>
+  <article class="whitepaper">
+    <div class="container">
+      <header class="wp-header">
+        <p class="wp-eyebrow">{isEs ? 'Whitepaper técnico' : 'Technical whitepaper'}</p>
+        <h1>{data.title}</h1>
+        <p class="wp-summary">{data.description}</p>
+        <div class="wp-meta small muted">
+          <time datetime={data.publishDate.toISOString()}>{fmtDate.format(data.publishDate)}</time>
+        </div>
+        <a class="wp-download" href={data.pdf} download>{pdfLabel}</a>
+      </header>
+
+      <div class="wp-body body-serif">
+        <slot />
+      </div>
+
+      <aside class="wp-subscribe">
+        <SubscribeForm lang={data.lang} source={source} variant="full" />
+      </aside>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .whitepaper { padding-block: var(--space-xl); }
+  .wp-header { max-width: 680px; margin: 0 auto var(--space-12); display: flex; flex-direction: column; gap: var(--space-4); }
+  .wp-eyebrow { font-family: var(--font-mono); font-size: var(--text-small-size); color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin: 0; }
+  .wp-summary { color: var(--text-muted); }
+  .wp-download {
+    align-self: flex-start;
+    padding: 0.6rem 1.1rem;
+    border-radius: var(--radius-md, 0.5rem);
+    background: var(--color-accent, #1e40af);
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .wp-download:hover { filter: brightness(1.12); }
+  .wp-body { max-width: 680px; margin: 0 auto; }
+  .wp-subscribe {
+    max-width: 680px;
+    margin: var(--space-12) auto 0;
+    padding: var(--space-sm);
+    background: var(--color-dark, #0f172a);
+    border: 1px solid var(--color-dark-border, rgba(255, 255, 255, 0.08));
+    border-radius: var(--radius-lg, 0.75rem);
+  }
+</style>
