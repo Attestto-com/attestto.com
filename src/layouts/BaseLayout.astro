@@ -30,6 +30,8 @@ interface Props {
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   /** Explicit breadcrumb trail. When omitted, one is derived from the URL. */
   breadcrumbs?: Crumb[];
+  /** Absolute or site-relative URLs of the language alternates for hreflang. */
+  alternates?: { en?: string; es?: string };
 }
 
 const {
@@ -41,6 +43,7 @@ const {
   darkHero = false,
   jsonLd,
   breadcrumbs,
+  alternates,
 } = Astro.props;
 
 // Breadcrumbs: use the provided trail, or derive one from the URL path. The
@@ -49,7 +52,14 @@ const SEG_LABELS: Record<string, string> = {
   products: 'Products',
   productos: 'Productos',
   blog: 'Blog',
+  whitepaper: 'Whitepaper',
+  documentos: 'Documentos',
 };
+
+const siteOrigin = Astro.site ?? new URL('https://attestto.com');
+const toAbs = (href?: string) => (href ? new URL(href, siteOrigin).href : canonical);
+const hrefEn = toAbs(alternates?.en);
+const hrefEs = toAbs(alternates?.es);
 const pathSegments = new URL(canonical).pathname.split('/').filter(Boolean);
 const derivedCrumbs: Crumb[] =
   pathSegments.length === 0
@@ -112,9 +122,9 @@ const jsonLdBlocks = [organizationLd, websiteLd, ...(jsonLd ? (Array.isArray(jso
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="alternate icon" href="/favicon.jpg" />
   <link rel="canonical" href={canonical} />
-  <link rel="alternate" hreflang="en" href={canonical} />
-  <link rel="alternate" hreflang="es" href={canonical} />
-  <link rel="alternate" hreflang="x-default" href={canonical} />
+  <link rel="alternate" hreflang="en" href={hrefEn} />
+  <link rel="alternate" hreflang="es" href={hrefEs} />
+  <link rel="alternate" hreflang="x-default" href={hrefEn} />
 
   <meta property="og:title" content={fullTitle} />
   <meta property="og:description" content={description} />
