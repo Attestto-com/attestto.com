@@ -13,9 +13,10 @@ interface Props {
 
 const { lang = 'en', source, variant = 'compact' } = Astro.props;
 
-// CONFIRM before launch against Buttondown -> "Set up your subscribe form" snippet.
-// Buttondown has used both buttondown.email and buttondown.com hosts.
-const ACTION = 'https://buttondown.com/api/emails/embed/subscribe/attestto';
+// Buttondown embed endpoint. Note the single hyphenated segment "embed-subscribe"
+// (NOT "embed/subscribe/") — the two-segment form 404s. Verified live 2026-07-23:
+// a POST here returns 400 on empty email, i.e. the endpoint is reached.
+const ACTION = 'https://buttondown.com/api/emails/embed-subscribe/attestto';
 
 const copy = {
   en: {
